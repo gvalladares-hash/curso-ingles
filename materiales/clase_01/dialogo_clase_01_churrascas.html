@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clase 01 · At the Feria Costumbrista</title>
+<style>
+  :root{
+    --verde:#1E4D33;
+    --verde-caja:#245239;
+    --terracota:#B04A28;
+    --dorado:#C5A15A;
+    --papel:#FBF7EF;
+    --papel2:#F3ECDD;
+    --tinta:#1B2A22;
+    --linea:#D9CFBC;
+    --ok:#2E7D4F;
+    --mal:#B03A2E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--papel2);
+    color:var(--tinta);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+  }
+  .page{
+    max-width:1000px;
+    margin:0 auto;
+    background:var(--papel);
+    padding:44px 56px 64px;
+    box-shadow:0 2px 24px rgba(27,42,34,.12);
+  }
+  .tabla-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  @media (max-width:700px){
+    .page{padding:26px 20px 44px}
+    body{font-size:15px}
+    .top-actions{float:none;margin:0 0 12px}
+    .turno{grid-template-columns:74px 1fr;gap:10px}
+    h1{font-size:30px}
+  }
+
+  /* ---------- Cabecera ---------- */
+  header.top{
+    border-bottom:3px double var(--dorado);
+    padding-bottom:18px;
+    margin-bottom:34px;
+  }
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--terracota);
+    font-weight:700;
+  }
+  h1{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:38px;
+    line-height:1.12;
+    margin:8px 0 6px;
+    color:var(--verde);
+    font-weight:400;
+  }
+  .sub{
+    margin:0;
+    color:#5A6B60;
+    font-size:15px;
+    font-style:italic;
+  }
+  .top-actions{float:right;margin-top:-6px}
+  .top-actions button{
+    background:none;border:1px solid var(--linea);color:#5A6B60;
+    border-radius:3px;padding:6px 12px;font-size:12px;cursor:pointer;letter-spacing:.04em;
+  }
+  .top-actions button:hover{border-color:var(--dorado);color:var(--verde)}
+
+  /* ---------- Secciones ---------- */
+  section{margin-bottom:46px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+  .sec-num{
+    font-family:Georgia,serif;
+    font-size:15px;
+    color:var(--dorado);
+    border:1.5px solid var(--dorado);
+    border-radius:50%;
+    width:30px;height:30px;
+    display:inline-flex;align-items:center;justify-content:center;
+    flex:0 0 auto;
+    font-variant-numeric:tabular-nums;
+  }
+  h2{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:23px;
+    font-weight:400;
+    color:var(--verde);
+    margin:0;
+    line-height:1.2;
+  }
+  .hint{font-size:14px;color:#5A6B60;margin:0 0 14px}
+
+  /* ---------- Diálogo ---------- */
+  .dialogo{
+    background:#fff;
+    border:1px solid var(--linea);
+    border-left:4px solid var(--verde);
+    padding:22px 26px 18px;
+  }
+  .turno{
+    display:grid;
+    grid-template-columns:96px 1fr;
+    gap:14px;
+    padding:7px 0;
+    border-bottom:1px dotted #E7DFD0;
+  }
+  .turno:last-child{border-bottom:none}
+  .quien{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.12em;
+    padding-top:4px;
+  }
+  .maria .quien{color:var(--terracota)}
+  .sophie .quien{color:var(--verde)}
+  .dice{font-size:17px;line-height:1.5}
+  .nota-escena{
+    font-size:13px;
+    color:#6B7A70;
+    font-style:italic;
+    margin:0 0 14px;
+  }
+
+  /* ---------- Huecos para completar ---------- */
+  input.blank{
+    font:inherit;
+    font-size:15px;
+    color:var(--verde);
+    background:transparent;
+    border:none;
+    border-bottom:1.5px dashed var(--dorado);
+    border-radius:0;
+    padding:1px 6px 2px;
+    min-width:110px;
+    width:150px;
+    outline:none;
+    transition:border-color .15s, background .15s;
+  }
+  input.blank:focus{border-bottom-color:var(--terracota);background:#FFFDF7}
+  input.blank.ancho{width:230px}
+  .nw{white-space:nowrap}
+  input.blank.corto{width:132px;min-width:96px}
+  input.blank.largo{width:352px;max-width:100%}
+  .items .blank{width:92px;min-width:64px}
+  input.blank.ok{border-bottom-color:var(--ok);background:#EAF5EE;color:var(--ok)}
+  input.blank.mal{border-bottom-color:var(--mal);background:#FBE9E7;color:var(--mal)}
+
+  /* ---------- Ejercicios ---------- */
+  .card{
+    background:#fff;
+    border:1px solid var(--linea);
+    padding:22px 26px 20px;
+    margin-bottom:22px;
+  }
+  .card h3{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--terracota);
+    margin:0 0 4px;
+    font-weight:700;
+  }
+  .card .enunciado{font-size:15px;color:#42524A;margin:0 0 16px}
+  .items{list-style:none;margin:0;padding:0;counter-reset:item}
+  .items li{
+    counter-increment:item;
+    padding:7px 0 7px 30px;
+    position:relative;
+    font-size:16px;
+    line-height:1.7;
+  }
+  .items li::before{
+    content:counter(item)".";
+    position:absolute;left:0;top:7px;
+    color:var(--dorado);
+    font-size:13px;
+    font-weight:700;
+    width:22px;
+  }
+  .items li .en{color:#33453C}
+  #ex3 .items li{padding-top:9px;padding-bottom:9px;line-height:1.5}
+  #ex3 .chips{margin:0 14px 0 0;vertical-align:middle}
+  #ex3 input.blank{width:320px;vertical-align:middle}
+  #ex4 select.blank{
+    width:300px;
+    border:1px solid var(--linea);
+    background:#fff;
+    padding:6px 8px;
+    border-radius:2px;
+    font-size:15px;
+  }
+  #ex4 select.blank:focus{border-color:var(--terracota);outline:none}
+  #ex4 select.blank.ok{border-color:var(--ok);background:#EAF5EE;color:var(--ok)}
+  #ex4 select.blank.mal{border-color:var(--mal);background:#FBE9E7;color:var(--mal)}
+  #ex5 input.blank{width:104px;min-width:72px}
+  .two-col{columns:2;column-gap:40px}
+  @media (max-width:700px){.two-col{columns:1}}
+
+  .instruccion-en{font-size:14px;color:#6B7A70;margin:0 0 12px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 8px}
+  .chip{
+    font-size:12.5px;color:#5A6B60;background:var(--papel2);
+    border:1px solid #E4DAC7;border-radius:20px;padding:2px 10px;
+  }
+
+  /* ---------- Tabla to be ---------- */
+  table.gram{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border:1px solid var(--linea);
+    font-size:15px;
+    margin-bottom:8px;
+  }
+  table.gram th{
+    background:var(--verde-caja);
+    color:#F3ECDD;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    text-align:left;
+    padding:9px 14px;
+    font-weight:600;
+  }
+  table.gram td{
+    padding:9px 14px;
+    border-top:1px solid #EDE6D8;
+    vertical-align:top;
+  }
+  table.gram td:first-child{color:var(--terracota);font-weight:600;white-space:nowrap}
+  table.gram tr:nth-child(even) td{background:#FDFBF5}
+  .gram-mini{font-size:14px;color:#5A6B60;margin:0 0 18px}
+  .gram-mini b{color:var(--verde)}
+
+  /* ---------- Botones y clave ---------- */
+  .acciones{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+  button.check{
+    background:var(--verde);
+    color:#FBF7EF;
+    border:none;
+    padding:9px 20px;
+    font-size:13px;
+    letter-spacing:.06em;
+    border-radius:2px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  button.check:hover{background:var(--verde-caja)}
+  button.ghost{
+    background:none;
+    border:1px solid var(--linea);
+    color:#5A6B60;
+    padding:8px 16px;
+    font-size:13px;
+    border-radius:2px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  button.ghost:hover{border-color:var(--dorado);color:var(--verde)}
+  .score{font-size:13.5px;color:#5A6B60;font-weight:600}
+  .score.bien{color:var(--ok)}
+  .score.regular{color:var(--terracota)}
+  .clave{
+    margin-top:16px;
+    background:var(--papel2);
+    border-left:3px solid var(--dorado);
+    padding:14px 18px;
+    font-size:14px;
+    line-height:1.7;
+  }
+  .clave strong{color:var(--verde);font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px}
+  .clave ol{margin:0;padding-left:20px}
+  .clave .var{color:#7A877E;font-size:13px}
+
+  /* ---------- Producción ---------- */
+  .produccion{
+    background:var(--verde);
+    color:#F3ECDD;
+    padding:28px 32px;
+  }
+  .produccion h3{
+    font-family:Georgia,serif;
+    font-size:21px;
+    font-weight:400;
+    margin:0 0 6px;
+    color:#fff;
+    letter-spacing:0;
+    text-transform:none;
+  }
+  .produccion p{font-size:14.5px;margin:0 0 14px;color:#D8E4DA}
+  .produccion ul{margin:0 0 16px;padding-left:20px;font-size:15px;color:#F3ECDD}
+  .produccion li{margin-bottom:6px}
+  .produccion .ejemplo{
+    border-top:1px solid rgba(251,247,239,.25);
+    padding-top:14px;
+    font-size:14.5px;
+    font-style:italic;
+    color:#C5A15A;
+  }
+  .prod-lines{margin-top:16px}
+  .prod-lines div{
+    border-bottom:1px solid rgba(251,247,239,.35);
+    height:34px;
+  }
+
+  footer.pie{
+    margin-top:50px;
+    border-top:1px solid var(--linea);
+    padding-top:14px;
+    font-size:12px;
+    color:#7A877E;
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+
+  /* ---------- Impresión ---------- */
+  @page{size:A4 portrait;margin:14mm}
+  @media print{
+    body{background:#fff;font-size:11.5pt}
+    .page{max-width:none;box-shadow:none;padding:0;background:#fff}
+    .top-actions,.acciones,button{display:none !important}
+    .clave{display:block !important}
+    section{margin-bottom:24px;break-inside:avoid}
+    .card{break-inside:avoid;padding:14px 16px}
+    .dialogo{padding:14px 16px}
+    .produccion{background:#fff !important;color:#1B2A22 !important;border:1px solid var(--linea);padding:18px}
+    .produccion h3{color:var(--verde)}
+    .produccion p,.produccion ul{color:#33453C}
+    .produccion .ejemplo{color:var(--terracota);border-top-color:var(--linea)}
+    .prod-lines div{border-bottom-color:var(--linea)}
+    input.blank{width:120px}
+    h1{font-size:26pt}
+    .two-col{columns:2}
+  }
+
+  /* ---------- Ajustes móviles (al final para que ganen) ---------- */
+  @media (max-width:700px){
+    .top-actions{float:none;margin:0 0 14px}
+    .turno{grid-template-columns:74px 1fr;gap:10px}
+    h1{font-size:30px;word-wrap:break-word}
+    .dialogo{padding:16px 14px}
+    .card{padding:16px 14px}
+    .item, .items li{padding-right:0}
+    .produccion{padding:22px 18px}
+    .clave{padding:12px 14px}
+    input.blank{max-width:100%}
+    table.gram{min-width:560px}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div class="top-actions"><button onclick="window.print()">Imprimir / PDF</button></div>
+    <div class="eyebrow">Clase 01 · Nivel A1 · Módulo 1</div>
+    <h1>At the Feria Costumbrista</h1>
+    <p class="sub">María, vendedora de churrascas del valle · Sophie, turista australiana · Samo Alto, miércoles, cuatro de la tarde</p>
+  </header>
+
+  <!-- ============ 1. DIÁLOGO ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">1</span>
+      <h2>El diálogo</h2>
+    </div>
+    <p class="hint">Léelo dos veces: primero a velocidad normal, después lento. Fíjate en las fórmulas fijas: <i>I'm…</i>, <i>I'm from…</i>, <i>Nice to meet you</i>, <i>You're welcome</i>.</p>
+
+    <div class="dialogo">
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Good afternoon! Welcome to the Feria Costumbrista. I'm María.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">Good afternoon! Nice to meet you, María. I'm Sophie.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Nice to meet you, Sophie. Are you from Chile?</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">No, I'm from Australia. I'm from Sydney.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Welcome to the Valle del Río Hurtado! How do you spell your name?</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">S-O-P-H-I-E. And “churrasca”?</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">C-H-U-R-R-A-S-C-A. Ha! Are you looking for something?</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">I'm just looking at the products. They're beautiful.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Thank you! Churrascas! They're flat bread from the embers, a family recipe. With goat cheese, pebre or avocado.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">Goat cheese from the valley?</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Yes! Goat cheese from my farm, in Samo Alto. And a cup of tea or fresh juice.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">One churrasca with goat cheese, please. And a cup of tea.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Very good. One churrasca with goat cheese and one tea. Thank you!</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">Thank you, María.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">You're welcome. Enjoy your churrasca!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. DIÁLOGO DE EJERCICIO ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">2</span>
+      <h2>Diálogo de ejercicio: cambia el puesto</h2>
+    </div>
+    <p class="hint">Completa los espacios con tu propio negocio y tus productos. Después represéntalo en voz alta con un compañero, tres veces, cambiando los productos.</p>
+
+    <div class="dialogo">
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Good afternoon! Welcome to the <input class="blank" data-free="1" aria-label="lugar">. I'm <input class="blank" data-free="1" aria-label="nombre de la vendedora">.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">Good afternoon! Nice to meet you. I'm <input class="blank" data-free="1" aria-label="nombre del visitante">.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Nice to meet you. Are you from Chile?</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">No, I'm from <input class="blank" data-free="1" aria-label="país o ciudad">.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Welcome to the Valle del Río Hurtado! Are you looking for something?</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">I'm just looking at the products. They're beautiful.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Thank you! Everything is homemade, from the valley.<br>We have <input class="blank largo" data-free="1" aria-label="productos">.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">A jar of <input class="blank corto" data-free="1" aria-label="producto elegido">, please. And a <input class="blank corto" data-free="1" aria-label="segundo pedido">.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">Very good. Thank you!</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">SOPHIE</div>
+        <div class="dice">Thank you, María.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARÍA</div>
+        <div class="dice">You're welcome. Enjoy!</div>
+      </div>
+    </div>
+
+    <p class="instruccion-en" style="margin-top:14px">Productos para la sustitución:</p>
+    <div class="chips">
+      <span class="chip">fig jam</span>
+      <span class="chip">apricot jam</span>
+      <span class="chip">fresh fruit juice</span>
+      <span class="chip">dried fruit</span>
+      <span class="chip">walnuts</span>
+      <span class="chip">almonds</span>
+      <span class="chip">raisins</span>
+      <span class="chip">honey</span>
+    </div>
+
+    <div class="acciones">
+      <button class="ghost" onclick="toggleKey('key-dialogo')">Ver ejemplo completado</button>
+    </div>
+
+    <div class="clave" id="key-dialogo" hidden>
+      <strong>Ejemplo</strong>
+      Good afternoon! Welcome to the <b>Jam and Juice Stand</b>. I'm <b>Carla</b>.<br>
+      Nice to meet you. I'm <b>Peter</b>. No, I'm from <b>Canada</b>.<br>
+      Thank you! Everything is homemade, from the valley. We have <b>fig jam</b>, <b>apricot jam</b>, <b>fresh fruit juice</b> and <b>dried fruit</b>.<br>
+      A jar of <b>fig jam</b>, please. And a <b>fresh juice</b>.
+    </div>
+  </section>
+
+  <!-- ============ 3. VERBO TO BE ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">3</span>
+      <h2>El verbo <em>to be</em> en presente</h2>
+    </div>
+    <p class="hint">Tres formas, una sola idea: <b>am / is / are</b>. Lo que cambia es el sujeto, no el verbo.</p>
+
+    <div class="tabla-wrap">
+    <table class="gram">
+      <tr>
+        <th>Persona</th>
+        <th>Afirmativo</th>
+        <th>Negativo</th>
+        <th>Pregunta</th>
+      </tr>
+      <tr>
+        <td>I</td>
+        <td>I'm from Samo Alto.</td>
+        <td>I'm not from Ovalle.</td>
+        <td>Am I late?</td>
+      </tr>
+      <tr>
+        <td>You</td>
+        <td>You're welcome.</td>
+        <td>You aren't late.</td>
+        <td>Are you from Chile?</td>
+      </tr>
+      <tr>
+        <td>He / She / It</td>
+        <td>She's a tourist.<br>It's a family recipe.</td>
+        <td>She isn't from Chile.<br>It isn't expensive.</td>
+        <td>Is she from Australia?<br>Is it fresh?</td>
+      </tr>
+      <tr>
+        <td>We</td>
+        <td>We're at the feria.</td>
+        <td>We aren't closed.</td>
+        <td>Are we ready?</td>
+      </tr>
+      <tr>
+        <td>They</td>
+        <td>They're beautiful.</td>
+        <td>They aren't sweet.</td>
+        <td>Are they from the valley?</td>
+      </tr>
+    </table>
+    </div>
+
+    <p class="gram-mini">
+      <b>Forma completa:</b> I am · you are · he is · she is · it is · we are · they are.<br>
+      <b>Contracción:</b> I'm · you're · he's · she's · it's · we're · they're.<br>
+      <b>Negación:</b> I'm not · you aren't (you're not) · she isn't (she's not) · they aren't (they're not).<br>
+      <b>Respuesta corta:</b> Yes, I am. / No, I'm not. · Yes, she is. / No, she isn't. · Yes, they are. / No, they aren't.
+    </p>
+
+    <!-- Ejercicio 1 -->
+    <div class="card" id="ex1">
+      <h3>Ejercicio 1 · Afirmativo</h3>
+      <p class="enunciado">Completa con <b>am</b>, <b>is</b> o <b>are</b>.</p>
+      <ol class="items two-col">
+        <li>I <input class="blank" data-answer="am" aria-label="1"> María, from Samo Alto.</li>
+        <li>My churrascas <input class="blank" data-answer="are" aria-label="2"> flat bread.</li>
+        <li>Sophie <input class="blank" data-answer="is" aria-label="3"> from Australia.</li>
+        <li>We <input class="blank" data-answer="are" aria-label="4"> at the Feria Costumbrista.</li>
+        <li>The goat cheese <input class="blank" data-answer="is" aria-label="5"> from my farm.</li>
+        <li>You <input class="blank" data-answer="are" aria-label="6"> welcome.</li>
+        <li>They <input class="blank" data-answer="are" aria-label="7"> beautiful products.</li>
+        <li>It <input class="blank" data-answer="is" aria-label="8"> a family recipe.</li>
+      </ol>
+      <div class="acciones">
+        <button class="check" onclick="checkEx('ex1')">Comprobar</button>
+        <button class="ghost" onclick="toggleKey('key1')">Ver clave</button>
+        <span class="score" id="score-ex1"></span>
+      </div>
+      <div class="clave" id="key1" hidden>
+        <strong>Clave</strong>
+        1. am · 2. are · 3. is · 4. are · 5. is · 6. are · 7. are · 8. is
+      </div>
+    </div>
+
+    <!-- Ejercicio 2 -->
+    <div class="card" id="ex2">
+      <h3>Ejercicio 2 · Negativo</h3>
+      <p class="enunciado">Completa con <b>'m not</b>, <b>isn't</b> o <b>aren't</b>.</p>
+      <ol class="items two-col">
+        <li>I <input class="blank" data-answer="'m not|am not|i'm not" aria-label="1"> from Argentina.</li>
+        <li>Sophie <input class="blank" data-answer="isn't|is not" aria-label="2"> from Chile.</li>
+        <li>The churrascas <input class="blank" data-answer="aren't|are not" aria-label="3"> sweet.</li>
+        <li>We <input class="blank" data-answer="aren't|are not" aria-label="4"> closed today.</li>
+        <li>The tea <input class="blank" data-answer="isn't|is not" aria-label="5"> cold.</li>
+        <li>You <input class="blank" data-answer="aren't|are not" aria-label="6"> a tourist.</li>
+      </ol>
+      <div class="acciones">
+        <button class="check" onclick="checkEx('ex2')">Comprobar</button>
+        <button class="ghost" onclick="toggleKey('key2')">Ver clave</button>
+        <span class="score" id="score-ex2"></span>
+      </div>
+      <div class="clave" id="key2" hidden>
+        <strong>Clave</strong>
+        1. I'm not · 2. isn't · 3. aren't · 4. aren't · 5. isn't · 6. aren't<br>
+        <span class="var">También se aceptan las formas completas: am not, is not, are not.</span>
+      </div>
+    </div>
+
+    <!-- Ejercicio 3 -->
+    <div class="card" id="ex3">
+      <h3>Ejercicio 3 · Preguntas</h3>
+      <p class="enunciado">Ordena las palabras y escribe la pregunta. No olvides el signo de interrogación.</p>
+      <ol class="items">
+        <li><span class="chips" style="display:inline-flex;margin:0 0 6px"><span class="chip">you</span><span class="chip">are</span><span class="chip">from</span><span class="chip">Chile</span></span> <input class="blank ancho" data-answer="are you from chile" aria-label="1"></li>
+        <li><span class="chips" style="display:inline-flex;margin:0 0 6px"><span class="chip">she</span><span class="chip">is</span><span class="chip">a</span><span class="chip">tourist</span></span> <input class="blank ancho" data-answer="is she a tourist" aria-label="2"></li>
+        <li><span class="chips" style="display:inline-flex;margin:0 0 6px"><span class="chip">they</span><span class="chip">are</span><span class="chip">expensive</span></span> <input class="blank ancho" data-answer="are they expensive" aria-label="3"></li>
+        <li><span class="chips" style="display:inline-flex;margin:0 0 6px"><span class="chip">your</span><span class="chip">is</span><span class="chip">this</span><span class="chip">business</span></span> <input class="blank ancho" data-answer="is this your business" aria-label="4"></li>
+        <li><span class="chips" style="display:inline-flex;margin:0 0 6px"><span class="chip">we</span><span class="chip">are</span><span class="chip">late</span></span> <input class="blank ancho" data-answer="are we late" aria-label="5"></li>
+        <li><span class="chips" style="display:inline-flex;margin:0 0 6px"><span class="chip">from</span><span class="chip">you</span><span class="chip">are</span><span class="chip">where</span></span> <input class="blank ancho" data-answer="where are you from" aria-label="6"></li>
+      </ol>
+      <div class="acciones">
+        <button class="check" onclick="checkEx('ex3')">Comprobar</button>
+        <button class="ghost" onclick="toggleKey('key3')">Ver clave</button>
+        <span class="score" id="score-ex3"></span>
+      </div>
+      <div class="clave" id="key3" hidden>
+        <strong>Clave</strong>
+        1. Are you from Chile? · 2. Is she a tourist? · 3. Are they expensive? · 4. Is this your business? · 5. Are we late? · 6. Where are you from?
+      </div>
+    </div>
+
+    <!-- Ejercicio 4 -->
+    <div class="card" id="ex4">
+      <h3>Ejercicio 4 · Respuesta corta</h3>
+      <p class="enunciado">Elige la respuesta correcta para cada pregunta.</p>
+      <ol class="items">
+        <li>
+          Are you from Chile? <span class="var" style="color:#7A877E">(sí)</span><br>
+          <select class="blank ancho" data-answer="Yes, I am." aria-label="1">
+            <option value="">— elige —</option>
+            <option>Yes, I am.</option>
+            <option>Yes, you are.</option>
+            <option>Yes, I'm.</option>
+          </select>
+        </li>
+        <li>
+          Is Sophie from Australia? <span class="var" style="color:#7A877E">(sí)</span><br>
+          <select class="blank ancho" data-answer="Yes, she is." aria-label="2">
+            <option value="">— elige —</option>
+            <option>Yes, she is.</option>
+            <option>Yes, she's.</option>
+            <option>Yes, it is.</option>
+          </select>
+        </li>
+        <li>
+          Are the churrascas sweet? <span class="var" style="color:#7A877E">(no)</span><br>
+          <select class="blank ancho" data-answer="No, they aren't." aria-label="3">
+            <option value="">— elige —</option>
+            <option>No, they aren't.</option>
+            <option>No, it isn't.</option>
+            <option>No, they don't.</option>
+          </select>
+        </li>
+        <li>
+          Is this your farm? <span class="var" style="color:#7A877E">(no)</span><br>
+          <select class="blank ancho" data-answer="No, it isn't." aria-label="4">
+            <option value="">— elige —</option>
+            <option>No, it isn't.</option>
+            <option>No, it aren't.</option>
+            <option>No, she isn't.</option>
+          </select>
+        </li>
+        <li>
+          Are you open today? <span class="var" style="color:#7A877E">(no, nosotros)</span><br>
+          <select class="blank ancho" data-answer="No, we aren't." aria-label="5">
+            <option value="">— elige —</option>
+            <option>No, we aren't.</option>
+            <option>No, we isn't.</option>
+            <option>No, I'm not.</option>
+          </select>
+        </li>
+        <li>
+          Are we ready? <span class="var" style="color:#7A877E">(sí)</span><br>
+          <select class="blank ancho" data-answer="Yes, we are." aria-label="6">
+            <option value="">— elige —</option>
+            <option>Yes, we are.</option>
+            <option>Yes, we're.</option>
+            <option>Yes, they are.</option>
+          </select>
+        </li>
+      </ol>
+      <div class="acciones">
+        <button class="check" onclick="checkEx('ex4')">Comprobar</button>
+        <button class="ghost" onclick="toggleKey('key4')">Ver clave</button>
+        <span class="score" id="score-ex4"></span>
+      </div>
+      <div class="clave" id="key4" hidden>
+        <strong>Clave</strong>
+        1. Yes, I am. · 2. Yes, she is. · 3. No, they aren't. · 4. No, it isn't. · 5. No, we aren't. · 6. Yes, we are.<br>
+        <span class="var">En la respuesta corta afirmativa no se contrae: «Yes, I am», nunca «Yes, I'm».</span>
+      </div>
+    </div>
+
+    <!-- Ejercicio 5 -->
+    <div class="card" id="ex5">
+      <h3>Ejercicio 5 · Mini diálogo en la feria</h3>
+      <p class="enunciado">Completa con la forma correcta de <b>to be</b>: afirmativa, negativa o pregunta.</p>
+      <div class="dialogo" style="border-left-color:var(--dorado)">
+        <div class="turno sophie">
+          <div class="quien">SOPHIE</div>
+          <div class="dice">Good afternoon! <input class="blank" data-answer="is" aria-label="1"> this the Feria Costumbrista?</div>
+        </div>
+        <div class="turno maria">
+          <div class="quien">MARÍA</div>
+          <div class="dice">Yes, it <input class="blank" data-answer="is" aria-label="2">. Welcome! I <input class="blank" data-answer="am" aria-label="3"> María.</div>
+        </div>
+        <div class="turno sophie">
+          <div class="quien">SOPHIE</div>
+          <div class="dice">Nice to meet you, María. I <input class="blank" data-answer="am" aria-label="4"> Sophie. I <input class="blank" data-answer="am" aria-label="5"> not from Chile. I <input class="blank" data-answer="am" aria-label="6"> from Australia.</div>
+        </div>
+        <div class="turno maria">
+          <div class="quien">MARÍA</div>
+          <div class="dice">You <input class="blank" data-answer="are" aria-label="7"> welcome here. The churrascas <input class="blank" data-answer="are" aria-label="8"> fresh today.</div>
+        </div>
+      </div>
+      <div class="acciones">
+        <button class="check" onclick="checkEx('ex5')">Comprobar</button>
+        <button class="ghost" onclick="toggleKey('key5')">Ver clave</button>
+        <span class="score" id="score-ex5"></span>
+      </div>
+      <div class="clave" id="key5" hidden>
+        <strong>Clave</strong>
+        1. Is · 2. is · 3. am (I'm) · 4. am (I'm) · 5. am (I'm) · 6. am (I'm) · 7. are (You're) · 8. are
+      </div>
+    </div>
+
+    <!-- Producción -->
+    <div class="produccion">
+      <h3>Tu turno</h3>
+      <p>Escribe tres oraciones sobre ti y tu negocio, usando los tres modos del verbo <em>to be</em>.</p>
+      <ul>
+        <li>Una <b>afirmativa</b>: di quién eres y de dónde eres.</li>
+        <li>Una <b>negativa</b>: di algo que no eres o que tu negocio no es.</li>
+        <li>Una <b>pregunta</b>: pregúntale algo a tu visitante.</li>
+      </ul>
+      <div class="prod-lines">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <p class="ejemplo">I'm Carla. I'm from Samo Alto. I'm not a guide. Are you from Chile?</p>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <span>Curso de inglés para emprendedores · Valle del Río Hurtado</span>
+    <span>Clase 01 · A1 · El verbo <em>to be</em></span>
+  </footer>
+
+</div>
+
+<script>
+  function norm(s){
+    return (s || "")
+      .toLowerCase()
+      .replace(/[’‘]/g, "'")
+      .replace(/[.,!¿?;:]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function checkEx(id){
+    var box = document.getElementById(id);
+    var fields = box.querySelectorAll("input.blank, select.blank");
+    var total = 0, right = 0;
+
+    fields.forEach(function(f){
+      // los huecos libres del diálogo de práctica no se corrigen
+      if (f.dataset.free) return;
+      var answers = (f.dataset.answer || "").split("|").map(norm);
+      var value = norm(f.value);
+      total++;
+      if (value && answers.indexOf(value) !== -1){
+        right++;
+        f.classList.add("ok");
+        f.classList.remove("mal");
+      } else {
+        f.classList.add("mal");
+        f.classList.remove("ok");
+      }
+    });
+
+    var out = document.getElementById("score-" + id);
+    out.textContent = right + " / " + total + " correctas";
+    out.className = "score " + (right === total ? "bien" : "regular");
+    if (right === total) out.textContent += " · todo correcto";
+  }
+
+  function toggleKey(id){
+    var el = document.getElementById(id);
+    el.hidden = !el.hidden;
+  }
+</script>
+</body>
+</html>

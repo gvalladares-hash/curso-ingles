@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>How an English Sentence Works · A1 Canvas</title>
+<style>
+  :root{
+    --ink:#1b2a22;
+    --paper:#fbf7ef;
+    --paper2:#f3ecdd;
+    --green:#1e4d33;
+    --green2:#2c6a47;
+    --terra:#b04a28;
+    --terra-l:#e7a184;
+    --gold:#c5a15a;
+    --muted:#6f6a5c;
+    --line:#d9cfbc;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#e8e2d5}
+  body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink)}
+
+  .stage{display:flex;justify-content:center;padding:0}
+  .sheet{
+    width:1123px;height:794px;background:var(--paper);
+    padding:28px 34px 24px;position:relative;overflow:hidden;
+    box-shadow:0 10px 34px rgba(0,0,0,.22);
+    display:flex;flex-direction:column;
+  }
+
+  /* ---------- header ---------- */
+  .top{display:flex;justify-content:space-between;align-items:baseline;
+       border-bottom:2px solid var(--green);padding-bottom:8px}
+  .eyebrow{font-size:10px;letter-spacing:.19em;text-transform:uppercase;
+           color:var(--terra);font-weight:700}
+  .eyebrow span{color:var(--muted);font-weight:600}
+  .headR{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+  h1{font-family:Georgia,"Iowan Old Style",serif;font-weight:400;
+     font-size:33px;line-height:1.05;margin:9px 0 3px;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--terra)}
+  .sub{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+
+  /* ---------- shared card ---------- */
+  .card{background:#fff;border:1px solid var(--line);border-radius:11px;padding:13px 15px 14px;
+        display:flex;flex-direction:column}
+  .tag{display:inline-flex;align-items:center;gap:7px;font-size:9.5px;font-weight:800;
+       letter-spacing:.13em;text-transform:uppercase;color:var(--terra);margin-bottom:5px}
+  .tag i{width:16px;height:16px;border-radius:50%;background:var(--terra);color:#fff;
+         font-style:normal;font-size:9.5px;display:inline-flex;align-items:center;justify-content:center}
+  .card h2{font-family:Georgia,serif;font-size:16px;margin:0 0 8px;font-weight:400;line-height:1.15}
+  .card h2 b{font-weight:700}
+
+  /* ---------- schema ---------- */
+  .schema{background:var(--green);color:var(--paper);border:none;padding:12px 16px 14px;
+          border-radius:11px;flex:0 0 auto;position:relative;overflow:hidden}
+  .schema:after{content:"";position:absolute;right:-70px;top:-70px;width:230px;height:230px;
+                border-radius:50%;background:rgba(197,161,90,.13)}
+  .schema .tag{color:var(--gold)}
+  .schema .tag i{background:var(--gold);color:var(--green)}
+  .schema h2{color:var(--paper);font-size:16px;margin:0 0 9px}
+  .schema h2 b{color:var(--gold)}
+  .blocks{display:flex;align-items:stretch;gap:0;position:relative;z-index:1}
+  .blk{flex:1;border:1px solid rgba(251,247,239,.32);border-radius:8px;padding:6px 11px 7px;
+       background:rgba(251,247,239,.05)}
+  .blk .lb{font-size:9px;letter-spacing:.15em;font-weight:800;text-transform:uppercase;
+           color:var(--gold);margin-bottom:3px}
+  .blk .ex{font-family:Georgia,serif;font-size:17px;line-height:1.15}
+  .blk .gl{font-size:9.5px;color:rgba(251,247,239,.66);margin-top:2px;line-height:1.2}
+  .plus{width:26px;display:flex;align-items:center;justify-content:center;
+        font-size:20px;color:var(--gold);font-weight:300}
+  .sents{margin-top:8px;display:flex;flex-direction:column;gap:2px;position:relative;z-index:1}
+  .s{font-size:13px;display:flex;flex-wrap:wrap;gap:0;align-items:baseline}
+  .s .sep{color:rgba(251,247,239,.45);padding:0 7px}
+  .s .su{color:#ffe9b8;font-weight:700}
+  .s .ve{color:var(--terra-l);font-weight:700}
+  .s .co{color:#fff}
+  .schema .note{margin-top:6px;font-size:10px;color:rgba(251,247,239,.72);
+                border-top:1px solid rgba(251,247,239,.18);padding-top:6px;position:relative;z-index:1}
+  .schema .note b{color:#ffe9b8}
+
+  /* ---------- row B ---------- */
+  .rowB{display:grid;grid-template-columns:1fr 385px;gap:15px;margin-top:15px;flex:1;min-height:0}
+  .pair{display:grid;grid-template-columns:.92fr 1.08fr;gap:15px;min-height:0}
+
+  .mini{width:100%;border-collapse:collapse;margin-top:5px;font-size:12.5px}
+  .mini td{padding:3.2px 0;border-bottom:1px dotted #e2d9c8;vertical-align:top}
+  .mini tr:last-child td{border-bottom:none}
+  .mini .a{color:var(--muted);width:38%}
+  .mini .b{font-weight:700;color:var(--green)}
+  .mini .c{color:var(--terra);font-weight:700}
+
+  .rule{background:var(--paper2);border-radius:7px;padding:7px 9px;margin-top:7px;font-size:10px;line-height:1.5}
+  .rule b{color:var(--terra)}
+  .exlist{margin:7px 0 0;padding:0;list-style:none;font-size:12.5px;line-height:1.6}
+  .exlist li{display:flex;gap:6px}
+  .exlist .n{color:var(--muted);font-size:10px;width:11px;flex:0 0 11px;padding-top:2px}
+  .wrong{color:#a3341c}
+  .right{color:var(--green2)}
+
+  .formula{display:flex;align-items:center;gap:3px;margin:6px 0 2px;flex-wrap:nowrap}
+  .fb{border-radius:6px;padding:5px 5px;font-size:9.5px;font-weight:800;line-height:1.15;
+      text-align:center;white-space:nowrap;letter-spacing:.01em}
+  .fb.d{background:var(--green);color:#fff}
+  .fb.s{background:#efe6d2;color:var(--ink)}
+  .fb.v{background:#f7e3d7;color:var(--terra)}
+  .fb.c{background:#efe6d2;color:var(--ink)}
+  .fb.q{background:none;font-size:17px;color:var(--terra);padding:0 1px}
+  .fplus{font-size:11px;color:var(--muted)}
+
+  /* ---------- verbs ---------- */
+  .verbs{display:flex;flex-direction:column;gap:13px;min-height:0}
+  .vcard{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 13px 9px;flex:1}
+  .vhead{margin-bottom:3px}
+  .vhead h3{font-family:Georgia,serif;font-size:13.5px;margin:2px 0 1px;font-weight:400}
+  .vhead h3 b{font-weight:700}
+  .pill{font-size:8px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;
+        padding:2px 6px;border-radius:20px}
+  .pill.i{background:#f7e3d7;color:var(--terra)}
+  .pill.r{background:#e5efe4;color:var(--green)}
+  table.v{width:100%;border-collapse:collapse;font-size:11.5px}
+  table.v th{text-align:left;font-size:8px;letter-spacing:.12em;text-transform:uppercase;
+             color:var(--muted);font-weight:800;padding:0 0 2px;border-bottom:1.5px solid var(--green)}
+  table.v th.past{color:var(--terra);border-bottom-color:var(--terra)}
+  table.v td{padding:3.4px 0;border-bottom:1px solid #eee6d7;line-height:1.1}
+  table.v tr:last-child td{border-bottom:none}
+  table.v .inf{font-weight:700;color:var(--green);font-family:Georgia,serif;font-size:12.5px}
+  table.v .pp{color:var(--ink)}
+  table.v .sp{color:var(--muted);font-size:9.5px}
+
+  .turn{margin-top:auto;background:#e5efe4;border-left:3px solid var(--green2);border-radius:5px;
+        padding:7px 9px;font-size:10px;line-height:1.4;color:#25402f}
+  .turn b.h{display:block;font-size:8px;letter-spacing:.14em;text-transform:uppercase;
+        color:var(--green);margin-bottom:2px}
+  .foot{display:flex;justify-content:space-between;font-size:8.5px;color:var(--muted);
+        margin-top:9px;letter-spacing:.02em}
+  .foot b{color:var(--terra);letter-spacing:.12em;text-transform:uppercase;font-size:8px}
+
+  @page{size:A4 landscape;margin:0}
+  @media print{
+    html,body{background:#fff}
+    .stage{padding:0}
+    .sheet{box-shadow:none;zoom:1 !important;margin:0}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="sheet" id="sheet">
+
+  <!-- ================= HEADER ================= -->
+  <div class="top">
+    <div class="eyebrow">English for Entrepreneurs · Level A1 <span>/ Grammar canvas · Present Simple</span></div>
+    <div class="headR">Valle del Río Hurtado</div>
+  </div>
+  <h1>How an English sentence <em>works</em></h1>
+  <p class="sub">Three parts in a fixed order, one <b>‑s</b> for he / she / it, and two small words that open every question.</p>
+
+  <!-- ================= SCHEMA ================= -->
+  <div class="schema">
+    <div class="tag"><i>1</i> The skeleton — every sentence has three parts</div>
+    <h2><b>SUBJECT</b> + <b>VERB</b> + <b>COMPLEMENT</b></h2>
+
+    <div class="blocks">
+      <div class="blk">
+        <div class="lb">Subject</div>
+        <div class="ex">María</div>
+        <div class="gl">who does the action — never omitted in English</div>
+      </div>
+      <div class="plus">+</div>
+      <div class="blk">
+        <div class="lb">Verb</div>
+        <div class="ex">sells</div>
+        <div class="gl">the action, always in second place</div>
+      </div>
+      <div class="plus">+</div>
+      <div class="blk">
+        <div class="lb">Complement</div>
+        <div class="ex">churrascas</div>
+        <div class="gl">what, where or when — the rest of the idea</div>
+      </div>
+    </div>
+
+    <div class="sents">
+      <div class="s"><span class="su">María</span><span class="sep">|</span><span class="ve">sells</span><span class="sep">|</span><span class="co">churrascas at the fair.</span></div>
+      <div class="s"><span class="su">We</span><span class="sep">|</span><span class="ve">work</span><span class="sep">|</span><span class="co">in Samo Alto.</span></div>
+      <div class="s"><span class="su">Tourists</span><span class="sep">|</span><span class="ve">visit</span><span class="sep">|</span><span class="co">the valley in summer.</span></div>
+    </div>
+
+    <div class="note">Spanish can hide the subject — <i>«vendo churrascas»</i>. English cannot: say <b>I sell churrascas</b>. The subject is the first thing the listener hears.</div>
+  </div>
+
+  <!-- ================= ROW B ================= -->
+  <div class="rowB">
+
+    <div class="pair">
+      <!-- S RULE -->
+      <div class="card">
+        <div class="tag"><i>2</i> Third person singular</div>
+        <h2>He / she / it → the verb takes <b>‑s</b></h2>
+        <p style="font-size:10.5px;color:var(--muted);margin:0 0 7px;line-height:1.4">
+          One person or one thing — not I, not you, not they.
+        </p>
+        <table class="mini">
+          <tr><td class="a">I work</td><td class="c">→</td><td class="b">She work<b>s</b></td></tr>
+          <tr><td class="a">You sell</td><td class="c">→</td><td class="b">María sell<b>s</b></td></tr>
+          <tr><td class="a">They visit</td><td class="c">→</td><td class="b">The tourist visit<b>s</b></td></tr>
+          <tr><td class="a">We help</td><td class="c">→</td><td class="b">He help<b>s</b></td></tr>
+        </table>
+        <div class="rule">
+          <b>Spelling:</b> work → works · watch → watch<b>es</b> · go → go<b>es</b><br>
+          study → stud<b>ies</b> · <b>but</b> have → <b>has</b> (She has a shop.)
+        </div>
+        <ul class="exlist">
+          <li><span class="n">✗</span><span class="wrong">María sell churrascas.</span></li>
+          <li><span class="n">✓</span><span class="right">María sell<b>s</b> churrascas.</span></li>
+        </ul>
+        <div class="turn">
+          <b class="h">Your turn</b>
+          Write one true sentence about a person in your business: <i>My partner ___</i>
+        </div>
+      </div>
+
+      <!-- DO / DOES -->
+      <div class="card">
+        <div class="tag"><i>3</i> Questions in the present</div>
+        <h2>Start with <b>DO</b> or <b>DOES</b></h2>
+        <div class="formula">
+          <div class="fb d">DO / DOES</div><div class="fplus">+</div>
+          <div class="fb s">SUBJECT</div><div class="fplus">+</div>
+          <div class="fb v">VERB (base)</div><div class="fplus">+</div>
+          <div class="fb c">COMPLEMENT</div><div class="fb q">?</div>
+        </div>
+        <table class="mini" style="margin-top:5px">
+          <tr><td class="b" style="width:47%;font-size:10.5px">Do you sell cheese?</td><td class="a">I, you, we, they</td></tr>
+          <tr><td class="b" style="width:47%;font-size:10.5px">Does María work today?</td><td class="a">he, she, it</td></tr>
+        </table>
+        <div class="rule">
+          <b>The ‑s travels:</b> it moves from the verb to <b>does</b>.<br>
+          ✗ Does María sell<b>s</b>? &nbsp;·&nbsp; ✓ Does María sell?<br>
+          ✓ Do you sell? &nbsp;·&nbsp; ✓ Does she sell?
+        </div>
+        <div class="rule" style="background:#e5efe4">
+          <b style="color:var(--green)">Short answers:</b> Yes, she <b style="color:var(--green)">does</b>. / No, she <b style="color:var(--green)">doesn't</b>.<br>
+          <span style="color:var(--green)">Negative:</span> She <b style="color:var(--green)">doesn't sell</b> cheese.
+        </div>
+        <ul class="exlist" style="margin-top:7px">
+          <li><span class="n">✗</span><span class="wrong">Do she work here?</span></li>
+          <li><span class="n">✓</span><span class="right">Does she work here?</span></li>
+        </ul>
+        <div class="turn">
+          <b class="h">Your turn</b>
+          Ask a real question about a partner's business: <i>Do you ___ ?</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- VERBS -->
+    <div class="verbs">
+      <div class="vcard">
+        <div class="pill i">irregular · learn as a block</div>
+        <div class="vhead"><h3><b>5 irregular verbs</b> — the three forms change</h3></div>
+        <table class="v">
+          <tr><th>Infinitive</th><th class="past">Past</th><th>Participle</th></tr>
+          <tr><td class="inf">be</td><td>was / were</td><td class="pp">been</td></tr>
+          <tr><td class="inf">have</td><td>had</td><td class="pp">had</td></tr>
+          <tr><td class="inf">do</td><td>did</td><td class="pp">done</td></tr>
+          <tr><td class="inf">go</td><td>went</td><td class="pp">gone</td></tr>
+          <tr><td class="inf">make</td><td>made</td><td class="pp">made</td></tr>
+        </table>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px;font-style:italic">
+          I <b>was</b> at the fair · We <b>had</b> a good day · She <b>made</b> goat cheese
+        </div>
+      </div>
+
+      <div class="vcard">
+        <div class="pill r">regular · one pattern</div>
+        <div class="vhead"><h3><b>5 regular verbs</b> — just add <b>‑ed</b></h3></div>
+        <table class="v">
+          <tr><th>Infinitive</th><th class="past">Past</th><th>Participle</th></tr>
+          <tr><td class="inf">work</td><td>worked</td><td class="pp">worked</td></tr>
+          <tr><td class="inf">help</td><td>helped</td><td class="pp">helped</td></tr>
+          <tr><td class="inf">need</td><td>needed</td><td class="pp">needed</td></tr>
+          <tr><td class="inf">want</td><td>wanted</td><td class="pp">wanted</td></tr>
+          <tr><td class="inf">visit</td><td>visited</td><td class="pp">visited</td></tr>
+        </table>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px;font-style:italic">
+          We <b>worked</b> all morning · They <b>visited</b> the valley · I <b>needed</b> help
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <div><b>Formula</b> &nbsp; subject + verb + complement &nbsp;·&nbsp; he / she / it + s &nbsp;·&nbsp; do / does + subject + base verb</div>
+    <div>English for Entrepreneurs · A1 · Present Simple</div>
+  </div>
+
+</div>
+</div>
+
+<script>
+  (function(){
+    var sheet = document.getElementById('sheet');
+    function fit(){
+      var w = document.documentElement.clientWidth;
+      var s = Math.min(1, (w - 8) / 1123);
+      sheet.style.zoom = s;
+      document.body.style.height = (794 * s) + 'px';
+    }
+    fit();
+    window.addEventListener('resize', fit);
+  })();
+</script>
+</body>
+</html>
