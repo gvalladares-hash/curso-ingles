@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Canvas · The Verb To Be · Clase 02</title>
+<style>
+  :root{
+    --verde:#1E4D33; --verde2:#245239; --terra:#B04A28; --oro:#C5A15A;
+    --papel:#FBF7EF; --papel2:#F3ECDD; --tinta:#1B2A22; --linea:#D9CFBC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#E9E2D3}
+  body{font-family:Arial,Helvetica,sans-serif;color:var(--tinta);-webkit-font-smoothing:antialiased}
+  .hoja{
+    width:1123px;height:794px;background:var(--papel);
+    padding:32px 42px 24px;display:flex;flex-direction:column;
+    transform-origin:top left;margin:0 auto;
+  }
+  @media screen{
+    body{display:flex;justify-content:center;padding:10px}
+    .hoja{zoom:var(--z,1)}
+  }
+
+  /* cabecera */
+  .cab{display:flex;justify-content:space-between;align-items:flex-end;
+       border-bottom:2.5px double var(--oro);padding-bottom:12px;margin-bottom:18px}
+  .eyebrow{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);font-weight:700}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:42px;font-weight:400;color:var(--verde);line-height:1;margin-top:5px}
+  .cab .der{text-align:right;font-size:10.5px;color:#5A6B60;line-height:1.5}
+  .cab .der b{color:var(--verde);font-size:12.5px;letter-spacing:.06em}
+
+  /* cuerpo */
+  .cuerpo{flex:1;display:grid;grid-template-columns:432px 1fr;gap:34px;min-height:0}
+  .col{display:flex;flex-direction:column;min-height:0}
+
+  h2{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:700;margin-bottom:6px}
+  h2 span{font-weight:400;letter-spacing:0;text-transform:none;color:#6E7C72;font-size:10.5px;margin-left:7px}
+
+  table.conj{width:100%;border-collapse:collapse;font-size:12.4px;background:#fff}
+  table.conj th{
+    background:var(--verde2);color:#F3ECDD;font-size:9px;letter-spacing:.1em;
+    text-transform:uppercase;text-align:left;padding:8px 9px;font-weight:600
+  }
+  table.conj td{padding:7.5px 9px;border-top:1px solid #EDE6D8;vertical-align:middle}
+  table.conj tr:nth-child(even) td{background:#FDFBF5}
+  table.conj td:first-child{color:var(--terra);font-weight:700;white-space:nowrap}
+  table.conj .c{color:#6E7C72;font-size:11px}
+
+  .caja{background:var(--papel2);border-left:3px solid var(--oro);padding:12px 15px;margin-top:14px;font-size:11.4px;line-height:1.6}
+  .caja b{color:var(--verde)}
+  .caja .t{display:block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);font-weight:700;margin-bottom:4px}
+
+  /* ejercicios */
+  .ej{margin-bottom:15px}
+  .caja + .ej{margin-top:13px}
+  .ej:last-child{margin-bottom:0}
+  .enunciado{font-size:10.4px;color:#5A6B60;margin-bottom:7px;line-height:1.4}
+  .dos-col{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+  .item{font-size:12.2px;line-height:1.4;padding:4.5px 0;display:flex;gap:5px;align-items:baseline}
+  .n{color:var(--oro);font-weight:700;font-size:10px;min-width:13px;text-align:right;flex:0 0 auto}
+  .linea{flex:1;border-bottom:1px dotted #A9B5AB;min-height:15px}
+  .hueco{
+    display:inline-block;min-width:66px;border-bottom:1px solid var(--oro);
+    color:var(--verde);font-weight:700;text-align:center
+  }
+  .fija{color:var(--verde);font-weight:700}
+  .escribe{margin-bottom:2px}
+  .escribe p{font-size:12.2px;line-height:1.4;padding:3px 0 0;display:flex;gap:5px}
+  .renglon{height:19px;border-bottom:1px dotted #A9B5AB;margin:1px 0 5px 18px}
+  .respuesta{flex:1;min-width:40px;border-bottom:1px dotted #A9B5AB;align-self:flex-end;margin:0 0 4px 8px}
+
+  .pie{display:flex;justify-content:space-between;align-items:flex-end;
+       border-top:1px solid var(--linea);margin-top:16px;padding-top:9px;
+       font-size:9.5px;color:#6E7C72}
+  .pie .firma{display:flex;gap:22px}
+  .pie .firma span{border-bottom:1px solid var(--linea);min-width:150px;display:inline-block}
+  .pie em{font-style:normal;letter-spacing:.14em;text-transform:uppercase;font-size:7.4px}
+
+  @page{size:A4 landscape;margin:0}
+  @media print{
+    html,body{background:#fff}
+    .hoja{zoom:1 !important;margin:0}
+  }
+</style>
+</head>
+<body>
+<div class="hoja" id="hoja">
+
+  <div class="cab">
+    <div>
+      <p class="eyebrow">Clase 02 · This Is My Business · A1</p>
+      <h1>The Verb <i>To Be</i>, Present</h1>
+    </div>
+    <div class="der">
+      <b>ENGLISH FOR TOURISM</b><br>
+      Valle del Río Hurtado
+    </div>
+  </div>
+
+  <div class="cuerpo">
+
+    <!-- columna izquierda: gramática -->
+    <div class="col">
+      <h2>La conjugación</h2>
+      <table class="conj">
+        <tr><th>Sujeto</th><th>Afirmativo</th><th>Negativo</th><th>Pregunta</th></tr>
+        <tr><td>I</td><td>I am <span class="c">(I'm)</span></td><td>I'm not</td><td>Am I…?</td></tr>
+        <tr><td>you</td><td>You are <span class="c">(you're)</span></td><td>You aren't</td><td>Are you…?</td></tr>
+        <tr><td>he</td><td>He is <span class="c">(he's)</span></td><td>He isn't</td><td>Is he…?</td></tr>
+        <tr><td>she</td><td>She is <span class="c">(she's)</span></td><td>She isn't</td><td>Is she…?</td></tr>
+        <tr><td>it</td><td>It is <span class="c">(it's)</span></td><td>It isn't</td><td>Is it…?</td></tr>
+        <tr><td>we</td><td>We are <span class="c">(we're)</span></td><td>We aren't</td><td>Are we…?</td></tr>
+        <tr><td>they</td><td>They are <span class="c">(they're)</span></td><td>They aren't</td><td>Are they…?</td></tr>
+      </table>
+
+      <div class="caja">
+        <span class="t">Respuesta corta</span>
+        <b>Yes, I am.</b> / No, I'm not.<br>
+        <b>Yes, she is.</b> / No, she isn't.<br>
+        <b>Yes, they are.</b> / No, they aren't.
+      </div>
+
+      <div class="caja" style="border-left-color:var(--terra)">
+        <span class="t">Ojo con esto</span>
+        En la respuesta afirmativa <b>no se contrae</b>: se dice «Yes, I am», nunca «Yes, I'm».
+        Y en la pregunta el verbo va <b>antes</b> del sujeto: «Are you from Chile?».
+      </div>
+
+      <div class="ej">
+        <h2>Ejercicio 3 <span>responde con la respuesta corta</span></h2>
+        <div class="item"><span class="n">1</span><span>Are you from Chile? <i>(sí)</i></span><span class="respuesta"></span></div>
+        <div class="item"><span class="n">2</span><span>Is this your business? <i>(sí)</i></span><span class="respuesta"></span></div>
+        <div class="item"><span class="n">3</span><span>Are the jars fresh? <i>(no)</i></span><span class="respuesta"></span></div>
+        <div class="item"><span class="n">4</span><span>Is Sophie a guide? <i>(no)</i></span><span class="respuesta"></span></div>
+      </div>
+    </div>
+
+    <!-- columna derecha: ejercicios -->
+    <div class="col">
+      <div class="ej">
+        <h2>Ejercicio 1 <span>completa con am, is o are</span></h2>
+        <div class="dos-col">
+          <div class="item"><span class="n">1</span><span>I <span class="hueco"></span> Carla, from Samo Alto.</span></div>
+          <div class="item"><span class="n">5</span><span>Sophie <span class="hueco"></span> from Australia.</span></div>
+          <div class="item"><span class="n">2</span><span>These <span class="hueco"></span> my products.</span></div>
+          <div class="item"><span class="n">6</span><span>The jars <span class="hueco"></span> on the table.</span></div>
+          <div class="item"><span class="n">3</span><span>My fig jam <span class="hueco"></span> fresh.</span></div>
+          <div class="item"><span class="n">7</span><span>It <span class="hueco"></span> a family recipe.</span></div>
+          <div class="item"><span class="n">4</span><span>We <span class="hueco"></span> open today.</span></div>
+          <div class="item"><span class="n">8</span><span>You <span class="hueco"></span> welcome here.</span></div>
+        </div>
+      </div>
+
+      <div class="ej">
+        <h2>Ejercicio 2 <span>escribe la oración en negativo</span></h2>
+        <div class="escribe"><p><span class="n">1</span><span>I am from Santiago.</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">2</span><span>The churrascas are sweet.</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">3</span><span>Sophie is from Chile.</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">4</span><span>We are closed today.</span></p><div class="renglon"></div></div>
+      </div>
+
+      <div class="ej">
+        <h2>Ejercicio 4 <span>tu turno: escribe sobre tu negocio</span></h2>
+        <div class="escribe"><p><span class="n">1</span><span>Una oración afirmativa: quién eres y de dónde eres.</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">2</span><span>Una negativa: algo que tu negocio no es.</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">3</span><span>Una pregunta para tu visitante.</span></p><div class="renglon"></div></div>
+      </div>
+
+      <div class="caja" style="margin-top:auto;background:#fff;border-left-color:var(--verde)">
+        <span class="t">Para recordar</span>
+        <b>I</b> va con <b>am</b> · <b>he, she, it</b> van con <b>is</b> · <b>you, we, they</b> van con <b>are</b>.
+      </div>
+    </div>
+  </div>
+
+  <div class="pie">
+    <div class="firma">
+      <em>Nombre</em> <span></span>
+      <em>Curso</em> <span style="min-width:110px"></span>
+    </div>
+    <div>Clase 02 · The Verb <i>To Be</i> · English for Tourism</div>
+  </div>
+</div>
+
+<script>
+  function ajustar(){
+    var h = document.getElementById('hoja');
+    var z = Math.min(1, (window.innerWidth - 20) / 1123);
+    document.documentElement.style.setProperty('--z', z);
+    h.style.zoom = z;
+  }
+  window.addEventListener('resize', ajustar);
+  ajustar();
+</script>
+</body>
+</html>
