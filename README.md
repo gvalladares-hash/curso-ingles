@@ -1,5 +1,8 @@
 # English for Tourism · Sitio web del programa
 
+**Publicado en:** https://gvalladares-hash.github.io/curso-ingles/
+**Repositorio:** https://github.com/gvalladares-hash/curso-ingles
+
 Sitio estático del programa de inglés para el turismo del Valle del Río Hurtado
 (Ilustre Municipalidad de Río Hurtado · Departamento de Turismo).
 
