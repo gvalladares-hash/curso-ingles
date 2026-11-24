@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La conversación de las churrascas · Clase 01</title>
+<style>
+  :root {
+    --text-primary: #1a1a18;
+    --text-secondary: #5f5e5a;
+    --text-tertiary: #88877f;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f6f5f0;
+    --bg-tertiary: #eeedeb;
+    --border: rgba(0,0,0,0.15);
+    --border-hover: rgba(0,0,0,0.3);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text-primary: #e8e6de;
+      --text-secondary: #b4b2a9;
+      --text-tertiary: #888780;
+      --bg-primary: #1a1a18;
+      --bg-secondary: #2c2c2a;
+      --bg-tertiary: #3d3d3a;
+      --border: rgba(255,255,255,0.15);
+      --border-hover: rgba(255,255,255,0.3);
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg-tertiary);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .card {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 780px;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  h1 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-bottom: 24px;
+  }
+  svg { width: 100%; height: auto; }
+
+  /* === SVG Design System Classes === */
+
+  /* Text classes */
+  .t  { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; fill: var(--text-primary); }
+  .ts { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; fill: var(--text-secondary); }
+  .th { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; fill: var(--text-primary); font-weight: 500; }
+
+  /* Neutral box */
+  .box { fill: var(--bg-secondary); stroke: var(--border); stroke-width: 0.5px; }
+
+  /* Arrow */
+  .arr { stroke: var(--text-secondary); stroke-width: 1.5px; fill: none; }
+
+  /* Leader line */
+  .leader { stroke: var(--text-tertiary); stroke-width: 0.5px; stroke-dasharray: 4 3; fill: none; }
+
+  /* Clickable node */
+  .node { cursor: pointer; transition: opacity 0.15s; }
+  .node:hover { opacity: 0.82; }
+
+  /* === Color Ramp Classes (light mode) === */
+  .c-purple > rect, .c-purple > circle, .c-purple > ellipse { fill: #EEEDFE; stroke: #534AB7; }
+  .c-purple > .th, .c-purple > text.th { fill: #3C3489; }
+  .c-purple > .ts, .c-purple > text.ts { fill: #534AB7; }
+  .c-purple > .t,  .c-purple > text.t  { fill: #3C3489; }
+
+  .c-teal > rect, .c-teal > circle, .c-teal > ellipse { fill: #E1F5EE; stroke: #0F6E56; }
+  .c-teal > .th, .c-teal > text.th { fill: #085041; }
+  .c-teal > .ts, .c-teal > text.ts { fill: #0F6E56; }
+  .c-teal > .t,  .c-teal > text.t  { fill: #085041; }
+
+  .c-coral > rect, .c-coral > circle, .c-coral > ellipse { fill: #FAECE7; stroke: #993C1D; }
+  .c-coral > .th, .c-coral > text.th { fill: #712B13; }
+  .c-coral > .ts, .c-coral > text.ts { fill: #993C1D; }
+  .c-coral > .t,  .c-coral > text.t  { fill: #712B13; }
+
+  .c-pink > rect, .c-pink > circle, .c-pink > ellipse { fill: #FBEAF0; stroke: #993556; }
+  .c-pink > .th, .c-pink > text.th { fill: #72243E; }
+  .c-pink > .ts, .c-pink > text.ts { fill: #993556; }
+  .c-pink > .t,  .c-pink > text.t  { fill: #72243E; }
+
+  .c-gray > rect, .c-gray > circle, .c-gray > ellipse { fill: #F1EFE8; stroke: #5F5E5A; }
+  .c-gray > .th, .c-gray > text.th { fill: #444441; }
+  .c-gray > .ts, .c-gray > text.ts { fill: #5F5E5A; }
+  .c-gray > .t,  .c-gray > text.t  { fill: #444441; }
+
+  .c-blue > rect, .c-blue > circle, .c-blue > ellipse { fill: #E6F1FB; stroke: #185FA5; }
+  .c-blue > .th, .c-blue > text.th { fill: #0C447C; }
+  .c-blue > .ts, .c-blue > text.ts { fill: #185FA5; }
+  .c-blue > .t,  .c-blue > text.t  { fill: #0C447C; }
+
+  .c-green > rect, .c-green > circle, .c-green > ellipse { fill: #EAF3DE; stroke: #3B6D11; }
+  .c-green > .th, .c-green > text.th { fill: #27500A; }
+  .c-green > .ts, .c-green > text.ts { fill: #3B6D11; }
+  .c-green > .t,  .c-green > text.t  { fill: #27500A; }
+
+  .c-amber > rect, .c-amber > circle, .c-amber > ellipse { fill: #FAEEDA; stroke: #854F0B; }
+  .c-amber > .th, .c-amber > text.th { fill: #633806; }
+  .c-amber > .ts, .c-amber > text.ts { fill: #854F0B; }
+  .c-amber > .t,  .c-amber > text.t  { fill: #633806; }
+
+  .c-red > rect, .c-red > circle, .c-red > ellipse { fill: #FCEBEB; stroke: #A32D2D; }
+  .c-red > .th, .c-red > text.th { fill: #791F1F; }
+  .c-red > .ts, .c-red > text.ts { fill: #A32D2D; }
+  .c-red > .t,  .c-red > text.t  { fill: #791F1F; }
+
+  /* === Dark mode overrides === */
+  @media (prefers-color-scheme: dark) {
+    .c-purple > rect, .c-purple > circle, .c-purple > ellipse { fill: #3C3489; stroke: #AFA9EC; }
+    .c-purple > .th, .c-purple > text.th { fill: #CECBF6; }
+    .c-purple > .ts, .c-purple > text.ts { fill: #AFA9EC; }
+
+    .c-teal > rect, .c-teal > circle, .c-teal > ellipse { fill: #085041; stroke: #5DCAA5; }
+    .c-teal > .th, .c-teal > text.th { fill: #9FE1CB; }
+    .c-teal > .ts, .c-teal > text.ts { fill: #5DCAA5; }
+
+    .c-coral > rect, .c-coral > circle, .c-coral > ellipse { fill: #712B13; stroke: #F0997B; }
+    .c-coral > .th, .c-coral > text.th { fill: #F5C4B3; }
+    .c-coral > .ts, .c-coral > text.ts { fill: #F0997B; }
+
+    .c-pink > rect, .c-pink > circle, .c-pink > ellipse { fill: #72243E; stroke: #ED93B1; }
+    .c-pink > .th, .c-pink > text.th { fill: #F4C0D1; }
+    .c-pink > .ts, .c-pink > text.ts { fill: #ED93B1; }
+
+    .c-gray > rect, .c-gray > circle, .c-gray > ellipse { fill: #444441; stroke: #B4B2A9; }
+    .c-gray > .th, .c-gray > text.th { fill: #D3D1C7; }
+    .c-gray > .ts, .c-gray > text.ts { fill: #B4B2A9; }
+
+    .c-blue > rect, .c-blue > circle, .c-blue > ellipse { fill: #0C447C; stroke: #85B7EB; }
+    .c-blue > .th, .c-blue > text.th { fill: #B5D4F4; }
+    .c-blue > .ts, .c-blue > text.ts { fill: #85B7EB; }
+
+    .c-green > rect, .c-green > circle, .c-green > ellipse { fill: #27500A; stroke: #97C459; }
+    .c-green > .th, .c-green > text.th { fill: #C0DD97; }
+    .c-green > .ts, .c-green > text.ts { fill: #97C459; }
+
+    .c-amber > rect, .c-amber > circle, .c-amber > ellipse { fill: #633806; stroke: #EF9F27; }
+    .c-amber > .th, .c-amber > text.th { fill: #FAC775; }
+    .c-amber > .ts, .c-amber > text.ts { fill: #EF9F27; }
+
+    .c-red > rect, .c-red > circle, .c-red > ellipse { fill: #791F1F; stroke: #F09595; }
+    .c-red > .th, .c-red > text.th { fill: #F7C1C1; }
+    .c-red > .ts, .c-red > text.ts { fill: #F09595; }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>La conversación de las churrascas</h1>
+  <p class="subtitle">Clase 01 · nivel A1 · Feria Costumbrista de Samo Alto · quién dice qué, y en qué orden</p>
+  <svg width="100%" viewBox="0 0 680 916" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <line x1="340" y1="38" x2="340" y2="760" class="leader"/>
+  <line x1="308" y1="56" x2="340" y2="56" class="leader"/>
+  <circle cx="340" cy="56" r="3" fill="#888780"/>
+  <g class="node c-coral">
+    <rect x="40" y="20" width="268" height="72" rx="8" stroke-width="0.5"/>
+    <text class="ts" x="56" y="38" dominant-baseline="central">María</text>
+    <text class="th" x="56" y="60" dominant-baseline="central">Good afternoon! I&#x27;m María.</text>
+    <text class="ts" x="56" y="78" dominant-baseline="central">Buenas tardes, soy María.</text>
+  </g>
+  <line x1="372" y1="144" x2="340" y2="144" class="leader"/>
+  <circle cx="340" cy="144" r="3" fill="#888780"/>
+  <g class="node c-teal">
+    <rect x="372" y="108" width="268" height="72" rx="8" stroke-width="0.5"/>
+    <text class="ts" x="388" y="126" dominant-baseline="central">Sophie</text>
+    <text class="th" x="388" y="148" dominant-baseline="central">Nice to meet you. I&#x27;m Sophie.</text>
+    <text class="ts" x="388" y="166" dominant-baseline="central">Mucho gusto, soy Sophie.</text>
+  </g>
+  <line x1="308" y1="232" x2="340" y2="232" class="leader"/>
+  <circle cx="340" cy="232" r="3" fill="#888780"/>
+  <g class="node c-coral">
+    <rect x="40" y="196" width="268" height="72" rx="8" stroke-width="0.5"/>
+    <text class="ts" x="56" y="214" dominant-baseline="central">María</text>
+    <text class="th" x="56" y="236" dominant-baseline="central">Are you from Chile?</text>
+    <text class="ts" x="56" y="254" dominant-baseline="central">¿Es usted de Chile?</text>
+  </g>
+  <line x1="372" y1="320" x2="340" y2="320" class="leader"/>
+  <circle cx="340" cy="320" r="3" fill="#888780"/>
+  <g class="node c-teal">
+    <rect x="372" y="284" width="268" height="72" rx="8" stroke-width="0.5"/>
+    <text class="ts" x="388" y="302" dominant-baseline="central">Sophie</text>
+    <text class="th" x="388" y="324" dominant-baseline="central">No, I&#x27;m from Australia.</text>
+    <text class="ts" x="388" y="342" dominant-baseline="central">No, soy de Australia.</text>
+  </g>
+  <line x1="308" y1="408" x2="340" y2="408" class="leader"/>
+  <circle cx="340" cy="408" r="3" fill="#888780"/>
+  <g class="node c-coral">
+    <rect x="40" y="372" width="268" height="72" rx="8" stroke-width="0.5"/>
+    <text class="ts" x="56" y="390" dominant-baseline="central">María</text>
+    <text class="th" x="56" y="412" dominant-baseline="central">How do you spell your name?</text>
+    <text class="ts" x="56" y="430" dominant-baseline="central">¿Cómo se escribe su nombre?</text>
+  </g>
+  <line x1="372" y1="496" x2="340" y2="496" class="leader"/>
+  <circle cx="340" cy="496" r="3" fill="#888780"/>
+  <g class="node c-teal">
+    <rect x="372" y="460" width="268" height="72" rx="8" stroke-width="0.5"/>
+    <text class="ts" x="388" y="478" dominant-baseline="central">Sophie</text>
+    <text class="th" x="388" y="500" dominant-baseline="central">S-O-P-H-I-E.</text>
+    <text class="ts" x="388" y="518" dominant-baseline="central">Letra por letra.</text>
+  </g>
+  <line x1="308" y1="584" x2="340" y2="584" class="leader"/>
+  <circle cx="340" cy="584" r="3" fill="#888780"/>
+  <g class="node c-coral">
+    <rect x="40" y="548" width="268" height="72" rx="8" stroke-width="0.5"/>
+    <text class="ts" x="56" y="566" dominant-baseline="central">María</text>
+    <text class="th" x="56" y="588" dominant-baseline="central">These are my churrascas.</text>
+    <text class="ts" x="56" y="606" dominant-baseline="central">Queso de cabra, pebre o palta.</text>
+  </g>
+  <line x1="372" y1="672" x2="340" y2="672" class="leader"/>
+  <circle cx="340" cy="672" r="3" fill="#888780"/>
+  <g class="node c-teal">
+    <rect x="372" y="636" width="268" height="72" rx="8" stroke-width="0.5"/>
+    <text class="ts" x="388" y="654" dominant-baseline="central">Sophie</text>
+    <text class="th" x="388" y="676" dominant-baseline="central">One churrasca, please.</text>
+    <text class="ts" x="388" y="694" dominant-baseline="central">Una churrasca, por favor.</text>
+  </g>
+  <line x1="308" y1="760" x2="340" y2="760" class="leader"/>
+  <circle cx="340" cy="760" r="3" fill="#888780"/>
+  <g class="node c-coral">
+    <rect x="40" y="724" width="268" height="72" rx="8" stroke-width="0.5"/>
+    <text class="ts" x="56" y="742" dominant-baseline="central">María</text>
+    <text class="th" x="56" y="764" dominant-baseline="central">You&#x27;re welcome. Enjoy!</text>
+    <text class="ts" x="56" y="782" dominant-baseline="central">De nada, disfrute.</text>
+  </g>
+
+  <g class="c-gray">
+    <rect x="40" y="812" width="600" height="64" rx="12" stroke-width="0.5"/>
+    <text class="ts" x="64" y="835" dominant-baseline="central">Fórmulas que se aprenden de memoria</text>
+    <text class="th" x="64" y="856" dominant-baseline="central">I'm from… · Nice to meet you · How do you spell… · You're welcome</text>
+  </g>
+</svg>
+</div>
+</body>
+</html>
