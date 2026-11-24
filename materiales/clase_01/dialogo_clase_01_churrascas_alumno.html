@@ -77,6 +77,17 @@
   }
   .top-actions button:hover{border-color:var(--dorado);color:var(--verde)}
 
+  /* ---------- video junto al diálogo ---------- */
+  .dialogo-grid{display:grid;grid-template-columns:370px minmax(0,1fr);gap:26px;align-items:start}
+  .video-lado{position:sticky;top:14px}
+  .video-dialogo{width:100%;aspect-ratio:1/1;background:#000;border:1px solid var(--linea);display:block}
+  .video-pie{font-size:12px;color:#5A6B60;margin-top:8px;line-height:1.5}
+  .video-pie a{color:var(--terracota)}
+  @media (max-width:900px){
+    .dialogo-grid{grid-template-columns:1fr;gap:16px}
+    .video-lado{position:static}
+  }
+
   /* ---------- Secciones ---------- */
   section{margin-bottom:46px}
   .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
@@ -333,6 +344,8 @@
     section{margin-bottom:24px;break-inside:avoid}
     .card{break-inside:avoid;padding:14px 16px}
     .dialogo{padding:14px 16px}
+    .video-lado{display:none !important}
+    .dialogo-grid{grid-template-columns:1fr}
     .produccion{background:#fff !important;color:#1B2A22 !important;border:1px solid var(--linea);padding:18px}
     .produccion h3{color:var(--verde)}
     .produccion p,.produccion ul{color:#33453C}
@@ -354,6 +367,9 @@
     .produccion{padding:22px 18px}
     .clave{padding:12px 14px}
     input.blank{max-width:100%}
+    input.blank.largo{width:100%}
+    .turno > *{min-width:0}
+    .dice{min-width:0}
     table.gram{min-width:560px}
   }
 
@@ -383,7 +399,16 @@
     </div>
     <p class="hint">Léelo dos veces: primero a velocidad normal, después lento. Fíjate en las fórmulas fijas: <i>I'm…</i>, <i>I'm from…</i>, <i>Nice to meet you</i>, <i>You're welcome</i>.</p>
 
-    <div class="dialogo">
+    <div class="dialogo-grid">
+      <aside class="video-lado">
+        <video class="video-dialogo" controls preload="metadata" playsinline poster="ilustracion_puesto_color.png">
+          <source src="video_dialogo_churrascas_cuadrado.mp4" type="video/mp4">
+          Tu navegador no reproduce el video. <a href="video_dialogo_churrascas_cuadrado.mp4">Descárgalo aquí</a>.
+        </video>
+        <p class="video-pie">El diálogo completo, 57 segundos. Para proyectar, <a href="video_dialogo_churrascas_16x9.mp4">versión 16:9</a>.</p>
+      </aside>
+
+      <div class="dialogo">
       <div class="turno maria">
         <div class="quien">MARÍA</div>
         <div class="dice">Good afternoon! Welcome to the Feria Costumbrista. I'm María.</div>
@@ -443,6 +468,7 @@
       <div class="turno maria">
         <div class="quien">MARÍA</div>
         <div class="dice">You're welcome. Enjoy your churrasca!</div>
+      </div>
       </div>
     </div>
   </section>
