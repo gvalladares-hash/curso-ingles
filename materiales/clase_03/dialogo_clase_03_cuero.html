@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clase 03 · Getting to know you</title>
+<style>
+  :root{
+    --verde:#1E4D33;
+    --verde-caja:#245239;
+    --terracota:#B04A28;
+    --dorado:#C5A15A;
+    --papel:#FBF7EF;
+    --papel2:#F3ECDD;
+    --tinta:#1B2A22;
+    --linea:#D9CFBC;
+    --ok:#2E7D4F;
+    --mal:#B03A2E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--papel2);
+    color:var(--tinta);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+  }
+  .page{
+    max-width:1000px;
+    margin:0 auto;
+    background:var(--papel);
+    padding:44px 56px 64px;
+    box-shadow:0 2px 24px rgba(27,42,34,.12);
+  }
+  .tabla-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  @media (max-width:700px){
+    .page{padding:26px 20px 44px}
+    body{font-size:15px}
+    .top-actions{float:none;margin:0 0 12px}
+    .turno{grid-template-columns:74px 1fr;gap:10px}
+    h1{font-size:30px}
+  }
+
+  /* ---------- Cabecera ---------- */
+  header.top{
+    border-bottom:3px double var(--dorado);
+    padding-bottom:18px;
+    margin-bottom:34px;
+  }
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--terracota);
+    font-weight:700;
+  }
+  h1{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:38px;
+    line-height:1.12;
+    margin:8px 0 6px;
+    color:var(--verde);
+    font-weight:400;
+  }
+  .sub{
+    margin:0;
+    color:#5A6B60;
+    font-size:15px;
+    font-style:italic;
+  }
+  .top-actions{float:right;margin-top:-6px}
+  .top-actions button{
+    background:none;border:1px solid var(--linea);color:#5A6B60;
+    border-radius:3px;padding:6px 12px;font-size:12px;cursor:pointer;letter-spacing:.04em;
+  }
+  .top-actions button:hover{border-color:var(--dorado);color:var(--verde)}
+
+  /* ---------- video junto al diálogo ---------- */
+  .dialogo-grid{display:grid;grid-template-columns:370px minmax(0,1fr);gap:26px;align-items:start}
+  .video-lado{position:sticky;top:14px}
+  .video-dialogo{width:100%;aspect-ratio:1/1;background:#000;border:1px solid var(--linea);display:block}
+  .video-pie{font-size:12px;color:#5A6B60;margin-top:8px;line-height:1.5}
+  .video-pie a{color:var(--terracota)}
+  @media (max-width:900px){
+    .dialogo-grid{grid-template-columns:1fr;gap:16px}
+    .video-lado{position:static}
+  }
+
+  /* ---------- Secciones ---------- */
+  section{margin-bottom:46px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+  .sec-num{
+    font-family:Georgia,serif;
+    font-size:15px;
+    color:var(--dorado);
+    border:1.5px solid var(--dorado);
+    border-radius:50%;
+    width:30px;height:30px;
+    display:inline-flex;align-items:center;justify-content:center;
+    flex:0 0 auto;
+    font-variant-numeric:tabular-nums;
+  }
+  h2{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:23px;
+    font-weight:400;
+    color:var(--verde);
+    margin:0;
+    line-height:1.2;
+  }
+  .hint{font-size:14px;color:#5A6B60;margin:0 0 14px}
+
+  /* ---------- Diálogo ---------- */
+  .dialogo{
+    background:#fff;
+    border:1px solid var(--linea);
+    border-left:4px solid var(--verde);
+    padding:22px 26px 18px;
+  }
+  .turno{
+    display:grid;
+    grid-template-columns:96px 1fr;
+    gap:14px;
+    padding:7px 0;
+    border-bottom:1px dotted #E7DFD0;
+  }
+  .turno:last-child{border-bottom:none}
+  .quien{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.12em;
+    padding-top:4px;
+  }
+  .maria .quien{color:var(--terracota)}
+  .sophie .quien{color:var(--verde)}
+  .dice{font-size:17px;line-height:1.5}
+  .nota-escena{
+    font-size:13px;
+    color:#6B7A70;
+    font-style:italic;
+    margin:0 0 14px;
+  }
+
+  /* ---------- Huecos para completar ---------- */
+  input.blank{
+    font:inherit;
+    font-size:15px;
+    color:var(--verde);
+    background:transparent;
+    border:none;
+    border-bottom:1.5px dashed var(--dorado);
+    border-radius:0;
+    padding:1px 6px 2px;
+    min-width:110px;
+    width:150px;
+    outline:none;
+    transition:border-color .15s, background .15s;
+  }
+  input.blank:focus{border-bottom-color:var(--terracota);background:#FFFDF7}
+  input.blank.ancho{width:230px}
+  .nw{white-space:nowrap}
+  input.blank.corto{width:132px;min-width:96px}
+  input.blank.largo{width:352px;max-width:100%}
+  .items .blank{width:92px;min-width:64px}
+  input.blank.ok{border-bottom-color:var(--ok);background:#EAF5EE;color:var(--ok)}
+  input.blank.mal{border-bottom-color:var(--mal);background:#FBE9E7;color:var(--mal)}
+
+  /* ---------- Ejercicios ---------- */
+  .card{
+    background:#fff;
+    border:1px solid var(--linea);
+    padding:22px 26px 20px;
+    margin-bottom:22px;
+  }
+  .card h3{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--terracota);
+    margin:0 0 4px;
+    font-weight:700;
+  }
+  .card .enunciado{font-size:15px;color:#42524A;margin:0 0 16px}
+  .items{list-style:none;margin:0;padding:0;counter-reset:item}
+  .items li{
+    counter-increment:item;
+    padding:7px 0 7px 30px;
+    position:relative;
+    font-size:16px;
+    line-height:1.7;
+  }
+  .items li::before{
+    content:counter(item)".";
+    position:absolute;left:0;top:7px;
+    color:var(--dorado);
+    font-size:13px;
+    font-weight:700;
+    width:22px;
+  }
+  .items li .en{color:#33453C}
+  #ex3 .items li{padding-top:9px;padding-bottom:9px;line-height:1.5}
+  #ex3 .chips{margin:0 14px 0 0;vertical-align:middle}
+  #ex3 input.blank{width:320px;vertical-align:middle}
+  #ex4 select.blank{
+    width:300px;
+    border:1px solid var(--linea);
+    background:#fff;
+    padding:6px 8px;
+    border-radius:2px;
+    font-size:15px;
+  }
+  #ex4 select.blank:focus{border-color:var(--terracota);outline:none}
+  #ex4 select.blank.ok{border-color:var(--ok);background:#EAF5EE;color:var(--ok)}
+  #ex4 select.blank.mal{border-color:var(--mal);background:#FBE9E7;color:var(--mal)}
+  #ex5 input.blank{width:104px;min-width:72px}
+  .two-col{columns:2;column-gap:40px}
+  @media (max-width:700px){.two-col{columns:1}}
+
+  .instruccion-en{font-size:14px;color:#6B7A70;margin:0 0 12px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 8px}
+  .chip{
+    font-size:12.5px;color:#5A6B60;background:var(--papel2);
+    border:1px solid #E4DAC7;border-radius:20px;padding:2px 10px;
+  }
+
+  /* ---------- Tabla to be ---------- */
+  table.gram{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border:1px solid var(--linea);
+    font-size:15px;
+    margin-bottom:8px;
+  }
+  table.gram th{
+    background:var(--verde-caja);
+    color:#F3ECDD;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    text-align:left;
+    padding:9px 14px;
+    font-weight:600;
+  }
+  table.gram td{
+    padding:9px 14px;
+    border-top:1px solid #EDE6D8;
+    vertical-align:top;
+  }
+  table.gram td:first-child{color:var(--terracota);font-weight:600;white-space:nowrap}
+  table.gram tr:nth-child(even) td{background:#FDFBF5}
+  .gram-mini{font-size:14px;color:#5A6B60;margin:0 0 18px}
+  .gram-mini b{color:var(--verde)}
+
+  /* ---------- Botones y clave ---------- */
+  .acciones{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+  button.check{
+    background:var(--verde);
+    color:#FBF7EF;
+    border:none;
+    padding:9px 20px;
+    font-size:13px;
+    letter-spacing:.06em;
+    border-radius:2px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  button.check:hover{background:var(--verde-caja)}
+  button.ghost{
+    background:none;
+    border:1px solid var(--linea);
+    color:#5A6B60;
+    padding:8px 16px;
+    font-size:13px;
+    border-radius:2px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  button.ghost:hover{border-color:var(--dorado);color:var(--verde)}
+  .score{font-size:13.5px;color:#5A6B60;font-weight:600}
+  .score.bien{color:var(--ok)}
+  .score.regular{color:var(--terracota)}
+  .clave{
+    margin-top:16px;
+    background:var(--papel2);
+    border-left:3px solid var(--dorado);
+    padding:14px 18px;
+    font-size:14px;
+    line-height:1.7;
+  }
+  .clave strong{color:var(--verde);font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px}
+  .clave ol{margin:0;padding-left:20px}
+  .clave .var{color:#7A877E;font-size:13px}
+
+  /* ---------- Producción ---------- */
+  .produccion{
+    background:var(--verde);
+    color:#F3ECDD;
+    padding:28px 32px;
+  }
+  .produccion h3{
+    font-family:Georgia,serif;
+    font-size:21px;
+    font-weight:400;
+    margin:0 0 6px;
+    color:#fff;
+    letter-spacing:0;
+    text-transform:none;
+  }
+  .produccion p{font-size:14.5px;margin:0 0 14px;color:#D8E4DA}
+  .produccion ul{margin:0 0 16px;padding-left:20px;font-size:15px;color:#F3ECDD}
+  .produccion li{margin-bottom:6px}
+  .produccion .ejemplo{
+    border-top:1px solid rgba(251,247,239,.25);
+    padding-top:14px;
+    font-size:14.5px;
+    font-style:italic;
+    color:#C5A15A;
+  }
+  .prod-lines{margin-top:16px}
+  .prod-lines div{
+    border-bottom:1px solid rgba(251,247,239,.35);
+    height:34px;
+  }
+
+  footer.pie{
+    margin-top:50px;
+    border-top:1px solid var(--linea);
+    padding-top:14px;
+    font-size:12px;
+    color:#7A877E;
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+
+  /* ---------- Impresión ---------- */
+  @page{size:A4 portrait;margin:14mm}
+  @media print{
+    body{background:#fff;font-size:11.5pt}
+    .page{max-width:none;box-shadow:none;padding:0;background:#fff}
+    .top-actions,.acciones,button{display:none !important}
+    .clave{display:block !important}
+    section{margin-bottom:24px;break-inside:avoid}
+    .card{break-inside:avoid;padding:14px 16px}
+    .dialogo{padding:14px 16px}
+    .video-lado{display:none !important}
+    .dialogo-grid{display:block !important}
+    .produccion{background:#fff !important;color:#1B2A22 !important;border:1px solid var(--linea);padding:18px}
+    .produccion h3{color:var(--verde)}
+    .produccion p,.produccion ul{color:#33453C}
+    .produccion .ejemplo{color:var(--terracota);border-top-color:var(--linea)}
+    .prod-lines div{border-bottom-color:var(--linea)}
+    input.blank{width:120px}
+    h1{font-size:26pt}
+    .two-col{columns:2}
+  }
+
+  /* ---------- Ajustes móviles (al final para que ganen) ---------- */
+  @media (max-width:700px){
+    .top-actions{float:none;margin:0 0 14px}
+    .turno{grid-template-columns:74px 1fr;gap:10px}
+    h1{font-size:30px;word-wrap:break-word}
+    .dialogo{padding:16px 14px}
+    .card{padding:16px 14px}
+    .item, .items li{padding-right:0}
+    .produccion{padding:22px 18px}
+    .clave{padding:12px 14px}
+    input.blank{max-width:100%}
+    input.blank.largo{width:100%}
+    .turno > *{min-width:0}
+    .dice{min-width:0}
+    table.gram{min-width:560px}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div class="top-actions"><button onclick="window.print()">Imprimir / PDF</button></div>
+    <div class="eyebrow">Clase 03 · Nivel A1–A2 · Módulo 1</div>
+    <h1>Getting to Know You</h1>
+    <p class="sub">Margarita, artesana del cuero · Steve, turista canadiense · Feria Costumbrista, Samo Alto</p>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">1</span>
+      <h2>El diálogo</h2>
+    </div>
+    <p class="hint">Escúchalo una vez completo y después léelo en voz alta. Las seis preguntas del final son las que te vas a llevar: con ellas puedes conocer a cualquier visitante.</p>
+
+    <div class="dialogo-grid">
+      <aside class="video-lado">
+        <video class="video-dialogo" controls preload="metadata" playsinline poster="poster_video_cuero.jpg">
+          <source src="video_dialogo_cuero_cuadrado.mp4" type="video/mp4">
+          Tu navegador no reproduce el video. <a href="video_dialogo_cuero_cuadrado.mp4">Descárgalo aquí</a>.
+        </video>
+        <p class="video-pie">El diálogo completo, 55 segundos. Para proyectar, <a href="video_dialogo_cuero_16x9.mp4">versión 16:9</a>.</p>
+      </aside>
+
+      <div class="dialogo">
+      <div class="turno maria">
+        <div class="quien">MARGARITA</div>
+        <div class="dice">Good afternoon! Welcome to my stall.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">STEVE</div>
+        <div class="dice">Good afternoon! What beautiful wallets.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARGARITA</div>
+        <div class="dice">Thank you! They&#x27;re handmade. I&#x27;m Margarita.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">STEVE</div>
+        <div class="dice">Nice to meet you, Margarita. I&#x27;m Steve.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARGARITA</div>
+        <div class="dice">Nice to meet you, Steve. Where are you from?</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">STEVE</div>
+        <div class="dice">I&#x27;m from Canada, from Vancouver.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARGARITA</div>
+        <div class="dice">Welcome to the valley. What do you do?</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">STEVE</div>
+        <div class="dice">I&#x27;m a photographer. And you? What do you make?</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARGARITA</div>
+        <div class="dice">I make wallets, bags and cup holders. All in leather.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">STEVE</div>
+        <div class="dice">How do you make them? By hand?</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARGARITA</div>
+        <div class="dice">Yes, by hand. My workshop is behind the stall.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">STEVE</div>
+        <div class="dice">How much is this wallet?</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARGARITA</div>
+        <div class="dice">Twelve thousand pesos.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">STEVE</div>
+        <div class="dice">It&#x27;s beautiful. I&#x27;ll take it.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARGARITA</div>
+        <div class="dice">Thank you. Here you are.</div>
+      </div>
+      <div class="turno sophie">
+        <div class="quien">STEVE</div>
+        <div class="dice">Thank you, Margarita.</div>
+      </div>
+      <div class="turno maria">
+        <div class="quien">MARGARITA</div>
+        <div class="dice">You&#x27;re welcome. Enjoy the valley!</div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">2</span>
+      <h2>Vocabulario del cuero</h2>
+    </div>
+    <p class="hint">Los términos que el visitante pregunta y que Margarita necesita para explicar su oficio.</p>
+
+    <table class="gram">
+      <tr><th>Español</th><th>English</th><th>Pronunciación aproximada</th></tr>
+        <tr><td>Cuero</td><td>leather</td><td>léder</td></tr>
+        <tr><td>Billetera</td><td>wallet</td><td>uólit</td></tr>
+        <tr><td>Cartera, bolso</td><td>bag</td><td>bag</td></tr>
+        <tr><td>Porta vasos</td><td>cup holder</td><td>cap jóulder</td></tr>
+        <tr><td>Hecho a mano</td><td>handmade</td><td>jándmeid</td></tr>
+        <tr><td>Taller</td><td>workshop</td><td>uórkshop</td></tr>
+        <tr><td>Artesana</td><td>craftswoman</td><td>cráftsuoman</td></tr>
+        <tr><td>Costura</td><td>stitching</td><td>stíching</td></tr>
+    </table>
+
+    <p class="hint" style="margin-top:10px"><b>Nota de pronunciación:</b> <i>leather</i> lleva el sonido /ð/, la lengua entre los dientes, como en <i>this</i>. <i>Handmade</i> se acentúa en la primera sílaba: /jánd-meid/.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">3</span>
+      <h2>Comprensión</h2>
+    </div>
+
+    <div class="card">
+      <h3>Después de escuchar</h3>
+      <p class="enunciado">Responde en español o en inglés, como te salga más fácil.</p>
+      <ol class="items">
+        <li>¿De dónde es Steve?</li>
+        <li>¿Qué hace Margarita y con qué material?</li>
+        <li>¿Cómo hace sus productos?</li>
+        <li>¿Cuánto cuesta la billetera?</li>
+      </ol>
+      <div class="acciones">
+        <button class="ghost" onclick="toggleKey('key1')">Ver clave</button>
+      </div>
+      <div class="clave" id="key1" hidden>
+        <strong>Clave</strong>
+        1. Es de Canadá, de Vancouver. · 2. Hace billeteras, carteras y porta vasos, en cuero. ·
+        3. A mano, en su taller detrás del puesto. · 4. Doce mil pesos.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">4</span>
+      <h2>Las preguntas de la conversación</h2>
+    </div>
+    <p class="hint">Seis preguntas para entrevistar a cualquier visitante. El canvas de Wh- questions las explica una por una.</p>
+
+    <table class="gram">
+      <tr><th>Pregunta</th><th>Respuesta modelo</th></tr>
+        <tr><td>Where are you from?</td><td>I'm from Canada.</td></tr>
+        <tr><td>What do you do?</td><td>I'm a photographer.</td></tr>
+        <tr><td>What do you make?</td><td>I make wallets and bags.</td></tr>
+        <tr><td>How do you make them?</td><td>By hand, in my workshop.</td></tr>
+        <tr><td>How much is this wallet?</td><td>Twelve thousand pesos.</td></tr>
+        <tr><td>Who is with you today?</td><td>My wife is with me.</td></tr>
+    </table>
+
+    <div class="produccion">
+      <h3>Tu turno</h3>
+      <p>Entrevista a un compañero con cuatro de estas preguntas y después preséntalo al grupo en tercera persona.</p>
+      <ul>
+        <li>Pregúntale de dónde es y qué hace.</li>
+        <li>Pregúntale qué producto vende o hace.</li>
+        <li>Preséntalo: <i>This is Carla. She's from Samo Alto. She makes cheese.</i></li>
+      </ul>
+      <div class="prod-lines">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <p class="ejemplo">This is Steve. He's from Canada. He's a photographer.</p>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <span>Curso de inglés para emprendedores · Valle del Río Hurtado</span>
+    <span>Clase 03 · A1–A2 · Getting to know you</span>
+  </footer>
+</div>
+
+<script>
+  function toggleKey(id){
+    var el = document.getElementById(id);
+    el.hidden = !el.hidden;
+  }
+</script>
+</body>
+</html>
