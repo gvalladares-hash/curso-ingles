@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Canvas · Wh- Questions · Clase 03</title>
+<style>
+  :root{
+    --verde:#1E4D33; --verde2:#245239; --terra:#B04A28; --oro:#C5A15A;
+    --papel:#FBF7EF; --papel2:#F3ECDD; --tinta:#1B2A22; --linea:#D9CFBC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#E9E2D3}
+  body{font-family:Arial,Helvetica,sans-serif;color:var(--tinta);-webkit-font-smoothing:antialiased}
+  .hoja{
+    width:1123px;height:794px;background:var(--papel);
+    padding:32px 42px 24px;display:flex;flex-direction:column;
+    transform-origin:top left;margin:0 auto;
+  }
+  @media screen{
+    body{display:flex;justify-content:center;padding:10px}
+    .hoja{zoom:var(--z,1)}
+  }
+
+  /* cabecera */
+  .cab{display:flex;justify-content:space-between;align-items:flex-end;
+       border-bottom:2.5px double var(--oro);padding-bottom:12px;margin-bottom:18px}
+  .eyebrow{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);font-weight:700}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:42px;font-weight:400;color:var(--verde);line-height:1;margin-top:5px}
+  .cab .der{text-align:right;font-size:10.5px;color:#5A6B60;line-height:1.5}
+  .cab .der b{color:var(--verde);font-size:12.5px;letter-spacing:.06em}
+
+  /* cuerpo */
+  .cuerpo{flex:1;display:grid;grid-template-columns:432px 1fr;gap:34px;min-height:0}
+  .col{display:flex;flex-direction:column;min-height:0}
+
+  h2{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:700;margin-bottom:6px}
+  h2 span{font-weight:400;letter-spacing:0;text-transform:none;color:#6E7C72;font-size:10.5px;margin-left:7px}
+
+  table.conj{width:100%;border-collapse:collapse;font-size:12.4px;background:#fff}
+  table.conj th{
+    background:var(--verde2);color:#F3ECDD;font-size:9px;letter-spacing:.1em;
+    text-transform:uppercase;text-align:left;padding:8px 9px;font-weight:600
+  }
+  table.conj td{padding:7.5px 9px;border-top:1px solid #EDE6D8;vertical-align:middle}
+  table.conj tr:nth-child(even) td{background:#FDFBF5}
+  table.conj td:first-child{color:var(--terra);font-weight:700;white-space:nowrap}
+  table.conj .c{color:#6E7C72;font-size:11px}
+
+  .caja{background:var(--papel2);border-left:3px solid var(--oro);padding:10px 14px;margin-top:12px;font-size:11.2px;line-height:1.55}
+  .caja b{color:var(--verde)}
+  .caja .t{display:block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);font-weight:700;margin-bottom:4px}
+
+  /* ejercicios */
+  .ej{margin-bottom:11px}
+  .caja + .ej{margin-top:13px}
+  .ej:last-child{margin-bottom:0}
+  .enunciado{font-size:10.4px;color:#5A6B60;margin-bottom:7px;line-height:1.4}
+  .dos-col{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+  .item{font-size:12.2px;line-height:1.4;padding:4.5px 0;display:flex;gap:5px;align-items:baseline}
+  .n{color:var(--oro);font-weight:700;font-size:10px;min-width:13px;text-align:right;flex:0 0 auto}
+  .linea{flex:1;border-bottom:1px dotted #A9B5AB;min-height:15px}
+  .hueco{
+    display:inline-block;min-width:66px;border-bottom:1px solid var(--oro);
+    color:var(--verde);font-weight:700;text-align:center
+  }
+  .fija{color:var(--verde);font-weight:700}
+  .escribe{margin-bottom:2px}
+  .escribe p{font-size:12.2px;line-height:1.35;padding:2px 0 0;display:flex;gap:5px}
+  .renglon{height:17px;border-bottom:1px dotted #A9B5AB;margin:1px 0 4px 18px}
+  .respuesta{flex:1;min-width:40px;border-bottom:1px dotted #A9B5AB;align-self:flex-end;margin:0 0 4px 8px}
+
+  .pie{display:flex;justify-content:space-between;align-items:flex-end;
+       border-top:1px solid var(--linea);margin-top:16px;padding-top:9px;
+       font-size:9.5px;color:#6E7C72}
+  .pie .firma{display:flex;gap:22px}
+  .pie .firma span{border-bottom:1px solid var(--linea);min-width:150px;display:inline-block}
+  .pie em{font-style:normal;letter-spacing:.14em;text-transform:uppercase;font-size:7.4px}
+
+  @page{size:A4 landscape;margin:0}
+  @media print{
+    html,body{background:#fff}
+    .hoja{zoom:1 !important;margin:0}
+  }
+</style>
+</head>
+<body>
+<div class="hoja" id="hoja">
+
+  <div class="cab">
+    <div>
+      <p class="eyebrow">Clase 03 · Getting to know you · A1</p>
+      <h1>Wh- Questions</h1>
+    </div>
+    <div class="der">
+      <b>ENGLISH FOR TOURISM</b><br>
+      Valle del Río Hurtado
+    </div>
+  </div>
+
+  <div class="cuerpo">
+
+    <div class="col">
+      <h2>Las ocho preguntas</h2>
+      <table class="conj">
+        <tr><th>Wh-</th><th>Pregunta</th><th>Respuesta</th></tr>
+        <tr><td>What</td><td>What do you make?</td><td>I make bags.</td></tr>
+        <tr><td>Where</td><td>Where are you from?</td><td>I'm from Canada.</td></tr>
+        <tr><td>When</td><td>When do you open?</td><td>At nine.</td></tr>
+        <tr><td>Who</td><td>Who is with you?</td><td>My daughter.</td></tr>
+        <tr><td>Why</td><td>Why do you work here?</td><td>Because I love the valley.</td></tr>
+        <tr><td>Which</td><td>Which bag do you like?</td><td>This one.</td></tr>
+        <tr><td>How</td><td>How do you make them?</td><td>By hand.</td></tr>
+        <tr><td>How much</td><td>How much is it?</td><td>Twelve thousand pesos.</td></tr>
+      </table>
+
+      <div class="caja">
+        <span class="t">El orden</span>
+        <b>Wh- + auxiliar + sujeto + verbo</b><br>
+        Where <b>are</b> you from? · What <b>do</b> you make?
+      </div>
+
+      <div class="caja" style="border-left-color:var(--terra)">
+        <span class="t">Ojo con esto</span>
+        <b>How much</b> pregunta precio. <b>How many</b> pregunta cantidad:
+        How many wallets? Five.
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="ej">
+        <h2>Ejercicio 1 <span>completa con la palabra correcta</span></h2>
+        <div class="dos-col">
+          <div class="item"><span class="n">1</span><span><span class="hueco"></span> do you make? <i>— Bags and wallets.</i></span></div>
+          <div class="item"><span class="n">2</span><span><span class="hueco"></span> are you from? <i>— From Canada.</i></span></div>
+          <div class="item"><span class="n">3</span><span><span class="hueco"></span> do you open? <i>— At nine.</i></span></div>
+          <div class="item"><span class="n">4</span><span><span class="hueco"></span> is with you? <i>— My daughter.</i></span></div>
+          <div class="item"><span class="n">5</span><span><span class="hueco"></span> is this wallet? <i>— Twelve thousand.</i></span></div>
+          <div class="item"><span class="n">6</span><span><span class="hueco"></span> bag do you like? <i>— The black one.</i></span></div>
+          <div class="item"><span class="n">7</span><span><span class="hueco"></span> do you make them? <i>— By hand.</i></span></div>
+          <div class="item"><span class="n">8</span><span><span class="hueco"></span> do you work here? <i>— Because I love it.</i></span></div>
+        </div>
+      </div>
+
+      <div class="ej">
+        <h2>Ejercicio 2 <span>ordena y escribe la pregunta</span></h2>
+        <div class="escribe"><p><span class="n">1</span><span>you · are · where · from</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">2</span><span>do · what · you · make</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">3</span><span>is · how · much · it</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">4</span><span>you · who · with · is</span></p><div class="renglon"></div></div>
+      </div>
+
+      <div class="ej">
+        <h2>Ejercicio 3 <span>tu turno: tres preguntas para un visitante</span></h2>
+        <div class="escribe"><p><span class="n">1</span><span>Pregunta de dónde es.</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">2</span><span>Pregunta qué hace o qué le gusta.</span></p><div class="renglon"></div></div>
+        <div class="escribe"><p><span class="n">3</span><span>Pregunta cuánto cuesta un producto.</span></p><div class="renglon"></div></div>
+      </div>
+
+      <div class="caja" style="margin-top:auto;background:#fff;border-left-color:var(--verde)">
+        <span class="t">Para recordar</span>
+        Con <b>to be</b> el wh- va delante: <b>Where are you from?</b> Con otros verbos hace falta
+        auxiliar: <b>What do you make?</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="pie">
+    <div class="firma">
+      <em>Nombre</em> <span></span>
+      <em>Curso</em> <span style="min-width:110px"></span>
+    </div>
+    <div>Clase 03 · Wh- Questions · English for Tourism</div>
+  </div>
+</div>
+
+<script>
+  function ajustar(){
+    var h = document.getElementById('hoja');
+    var z = Math.min(1, (window.innerWidth - 20) / 1123);
+    document.documentElement.style.setProperty('--z', z);
+    h.style.zoom = z;
+  }
+  window.addEventListener('resize', ajustar);
+  ajustar();
+</script>
+</body>
+</html>
