@@ -74,12 +74,12 @@ python3 build_site.py     # regenera el sitio (y actualiza la copia descargable)
 
 Requiere Python 3 y la librería `python-docx` (solo para el Word).
 
-### 3.3 Datos que **deben** reemplazarse antes de publicar
+### 3.3 Datos de contacto del curso
 
 | Dato | Dónde está | Valor actual (referencial) |
 |---|---|---|
-| Correo del Departamento de Turismo | `index.html`, sección `#inscripcion` y `assets/app.js` | `turismo@riohurtado.cl` |
-| Teléfono | `index.html`, sección `#inscripcion` | `+56 9 0000 0000` |
+| Correo del curso | `build_site.py`, sección `#inscripcion` y `assets/app.js` | `ingles.riohurtado2026@gmail.com` |
+| WhatsApp del grupo | `build_site.py`, sección `#inscripcion` | `+56 9 5705 0087` (`wa.me/56957050087`) |
 | Sedes por definir | `index.html`, sección `#calendario` | Salón Azul (confirmada) |
 | Fechas de clases | `index.html`, tabla del calendario | Propuesta desde el 18 de noviembre de 2026 |
 

@@ -269,14 +269,14 @@
       ].join("\n");
 
       const enlace =
-        "mailto:turismo@riohurtado.cl" +
+        "mailto:ingles.riohurtado2026@gmail.com" +
         "?subject=" + encodeURIComponent("Inscripción English for Tourism - " + nombre) +
         "&body=" + encodeURIComponent(cuerpo);
 
       if (avisoForm) {
         avisoForm.classList.remove("error");
         avisoForm.textContent =
-          "Se abrirá su aplicación de correo con la solicitud lista. Si no ocurre, escriba a turismo@riohurtado.cl.";
+          "Se abrirá su aplicación de correo con la solicitud lista. Si no ocurre, escriba a ingles.riohurtado2026@gmail.com o por WhatsApp al +56 9 5705 0087.";
       }
       window.location.href = enlace;
     });
