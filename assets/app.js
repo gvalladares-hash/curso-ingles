@@ -236,51 +236,6 @@
   }
 
   /* ------------------------------------------------------------- formulario */
-  const form = $("#form-inscripcion");
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const avisoForm = $("#form-aviso");
-      const datos = new FormData(form);
-      const nombre = (datos.get("nombre") || "").toString().trim();
-      const negocio = (datos.get("negocio") || "").toString().trim();
-      const contacto = (datos.get("contacto") || "").toString().trim();
-      const localidad = datos.get("localidad");
-      const grupo = datos.get("grupo") || "Sin especificar";
-
-      if (!nombre || !negocio || !contacto) {
-        if (avisoForm) {
-          avisoForm.textContent = "Complete su nombre, el emprendimiento y un medio de contacto.";
-          avisoForm.classList.add("error");
-        }
-        return;
-      }
-
-      const cuerpo = [
-        "Solicitud de inscripción al programa English for Tourism",
-        "",
-        "Nombre: " + nombre,
-        "Grupo: " + grupo,
-        "Oficina o emprendimiento: " + negocio,
-        "Localidad: " + localidad,
-        "Contacto: " + contacto,
-        "",
-        "Declaro mi interés en participar y mi disponibilidad para asistir a las sesiones del programa.",
-      ].join("\n");
-
-      const enlace =
-        "mailto:ingles.riohurtado2026@gmail.com" +
-        "?subject=" + encodeURIComponent("Inscripción English for Tourism - " + nombre) +
-        "&body=" + encodeURIComponent(cuerpo);
-
-      if (avisoForm) {
-        avisoForm.classList.remove("error");
-        avisoForm.textContent =
-          "Se abrirá su aplicación de correo con la solicitud lista. Si no ocurre, escriba a ingles.riohurtado2026@gmail.com o por WhatsApp al +56 9 5705 0087.";
-      }
-      window.location.href = enlace;
-    });
-  }
 
   /* --------------------------------------------------- detalles al imprimir */
   window.addEventListener("beforeprint", () => {

@@ -830,3 +830,71 @@ table { border-collapse: collapse; width: 100%; }
   color: var(--gris); white-space: nowrap;
 }
 @media print { .material { break-inside: avoid; } }
+
+/* ---------- Inscripción: errores, panel de registro y exportaciones ---------- */
+.campo__error {
+  margin: 6px 0 0; font-size: .78rem; color: #A32C1B; min-height: 0;
+}
+.campo__error:empty { display: none; }
+.campo input.campo--mal, .campo select.campo--mal { border-color: #A32C1B; background: #FDF3F1; }
+.form__estado { margin: 14px 0 0; font-size: .8rem; color: var(--gris); }
+.form__estado.aviso--pendiente { color: var(--adobe); }
+.form__aviso.ok { color: var(--salvia); }
+.form__aviso.ok a, .form__estado a { color: var(--adobe); text-decoration: underline; }
+
+.registro {
+  margin-top: clamp(36px, 5vw, 60px); background: var(--blanco);
+  border: 1px solid var(--linea); border-radius: var(--radio); padding: clamp(22px, 3vw, 32px);
+}
+.registro__cab h3 { margin: 0 0 6px; font-family: var(--serif); font-size: 1.35rem; color: var(--noche); }
+.registro__sub { margin: 0 0 22px; font-size: .86rem; color: var(--gris); max-width: 62ch; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 22px; }
+.kpi {
+  border: 1px solid var(--linea); border-radius: 10px; padding: 16px 18px;
+  background: linear-gradient(180deg, rgba(176, 85, 47, .05), transparent);
+}
+.kpi__n { display: block; font-family: var(--serif); font-size: 2rem; line-height: 1; color: var(--noche); }
+.kpi__t { display: block; margin-top: 6px; font-size: .68rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--salvia); }
+
+.registro__filtros { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; margin-bottom: 20px; }
+.campo-inline label { display: block; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--salvia); margin-bottom: 6px; }
+.campo-inline select {
+  font: inherit; font-size: .88rem; padding: 8px 10px; border: 1px solid var(--linea);
+  border-radius: 6px; background: var(--crema); color: var(--noche); min-width: 170px;
+}
+.registro__acciones { display: flex; flex-wrap: wrap; gap: 10px; margin-left: auto; }
+.registro__acciones .btn { width: auto; padding: 10px 16px; font-size: .74rem; }
+.btn--quieto { color: var(--gris) !important; border-color: var(--linea) !important; }
+
+.barras { list-style: none; padding: 0; margin: 0 0 22px; display: grid; gap: 8px; }
+.barras li { display: grid; grid-template-columns: minmax(90px, 180px) 1fr auto; gap: 12px; align-items: center;
+  font-size: .84rem; color: var(--noche); }
+.barras__barra { display: block; height: 8px; border-radius: 999px; background: var(--linea-suave); overflow: hidden; }
+.barras__barra i { display: block; height: 100%; border-radius: 999px; background: var(--adobe); }
+.barras__n { font-variant-numeric: tabular-nums; color: var(--gris); }
+.barras__vacio { display: block !important; color: var(--gris); font-style: italic; font-size: .84rem; }
+
+.tabla-caja { overflow-x: auto; border: 1px solid var(--linea); border-radius: 8px; }
+.tabla { width: 100%; border-collapse: collapse; font-size: .8rem; min-width: 720px; }
+.tabla th {
+  text-align: left; padding: 10px 12px; font-size: .64rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--salvia); background: var(--crema); border-bottom: 1px solid var(--linea); white-space: nowrap;
+}
+.tabla td { padding: 10px 12px; border-bottom: 1px solid var(--linea-suave); color: var(--noche); vertical-align: top; }
+.tabla tr:last-child td { border-bottom: 0; }
+.tabla__vacio { color: var(--gris); font-style: italic; text-align: center; padding: 24px !important; }
+.btn-borrar {
+  border: 1px solid var(--linea); background: transparent; color: var(--gris); cursor: pointer;
+  width: 26px; height: 26px; border-radius: 50%; line-height: 1; font-size: .8rem;
+}
+.btn-borrar:hover { border-color: #A32C1B; color: #A32C1B; }
+
+@media (max-width: 760px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .registro__acciones { margin-left: 0; width: 100%; }
+  .barras li { grid-template-columns: 1fr auto; }
+  .barras__barra { grid-column: 1 / -1; }
+}
