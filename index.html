@@ -1190,6 +1190,9 @@
             <select id="filtro-grupo"><option value="">Todos los grupos</option></select>
           </div>
           <div class="registro__acciones">
+            <input class="clave-planilla" id="clave-planilla" type="password" placeholder="Clave del curso"
+                   aria-label="Clave para leer la planilla completa" autocomplete="off">
+            <button class="btn btn--ghost" id="btn-cargar" type="button">Cargar de la planilla</button>
             <button class="btn btn--ghost" id="btn-csv" type="button">Descargar CSV</button>
             <button class="btn btn--ghost" id="btn-excel" type="button">Descargar Excel</button>
             <a class="btn btn--ghost" id="abrir-planilla" href="#" target="_blank" rel="noopener" hidden>Abrir planilla</a>
@@ -1197,6 +1200,7 @@
           </div>
         </div>
 
+        <p class="registro__aviso" id="aviso-planilla" role="status" hidden></p>
         <ul class="barras" id="barras"></ul>
 
         <div class="tabla-caja">

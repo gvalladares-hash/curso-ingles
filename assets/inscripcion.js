@@ -12,6 +12,9 @@ const INSCRIPCION = {
   CLAVE: "inglesRH.inscripciones.v1",
 };
 
+const CLAVE_LOCAL = "inglesRH.clave";
+let REMOTO = null;   // cuando tiene datos, el panel muestra la planilla completa
+
 const CAMPOS = ["nombre", "grupo", "negocio", "localidad", "correo", "whatsapp"];
 const ETIQUETAS = {
   nombre: "Nombre completo",
@@ -142,10 +145,14 @@ function agrupar(lista, campo) {
   return Array.from(cuenta.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es"));
 }
 
+function datos() {
+  return REMOTO || leer();
+}
+
 function pintarPanel() {
   const panel = $("#registro-inscripciones");
   if (!panel) return;
-  const lista = leer();
+  const lista = datos();
   const total = lista.length;
   const municipales = lista.filter((r) => /municip/i.test(r.grupo)).length;
   const emprendedores = total - municipales;
@@ -180,7 +187,9 @@ function pintarPanel() {
           (r) =>
             `<tr><td>${r.fecha || ""}</td><td>${r.nombre}</td><td>${r.grupo}</td>` +
             `<td>${r.negocio}</td><td>${r.localidad}</td><td>${r.correo}</td><td>${r.whatsapp}</td>` +
-            `<td><button class="btn-borrar" data-correo="${r.correo}" title="Quitar del registro de este dispositivo">✕</button></td></tr>`
+            (REMOTO ? "<td></td>"
+                     : `<td><button class="btn-borrar" data-correo="${r.correo}" title="Quitar del registro de este dispositivo">✕</button></td>`) +
+            "</tr>"
         )
         .join("")
     : '<tr><td colspan="8" class="tabla__vacio">Sin registros para mostrar.</td></tr>';
@@ -192,6 +201,14 @@ function pintarPanel() {
     opciones.map((g) => `<option${g === actual ? " selected" : ""}>${g}</option>`).join("");
 
   const estado = $("#estado-planilla");
+  if (REMOTO) {
+    const aviso = $("#aviso-planilla");
+    if (aviso) {
+      aviso.textContent = "Mostrando la planilla completa: " + REMOTO.length +
+        " inscripciones. Lo que se ve acá es lo mismo que descargan los botones.";
+      aviso.hidden = false;
+    }
+  }
   if (estado) {
     estado.textContent = INSCRIPCION.ENDPOINT
       ? "Conectado a la planilla del curso: cada inscripción queda guardada y avisa por correo."
@@ -226,7 +243,7 @@ function fechaArchivo() {
 }
 
 function exportarCSV() {
-  const lista = leer();
+  const lista = datos();
   const cabecera = ["Fecha", "Nombre completo", "Grupo", "Oficina o emprendimiento", "Localidad", "Correo", "WhatsApp"];
   const filas = lista.map((r) => [r.fecha, r.nombre, r.grupo, r.negocio, r.localidad, r.correo, r.whatsapp]);
   const escapar = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
@@ -236,7 +253,7 @@ function exportarCSV() {
 
 function exportarExcel() {
   // Hoja de cálculo XML de Excel: la abre directamente, sin avisos de formato.
-  const lista = leer();
+  const lista = datos();
   const cabecera = ["Fecha", "Nombre completo", "Grupo", "Oficina o emprendimiento", "Localidad", "Correo", "WhatsApp"];
   const celda = (v, cab) =>
     `<Cell><Data ss:Type="String">${cab ? "<B>" : ""}${String(v == null ? "" : v)
@@ -253,6 +270,34 @@ function exportarExcel() {
     "<Row>" + cabecera.map((c) => celda(c, true)).join("") + "</Row>" + filas +
     "</Table></Worksheet></Workbook>";
   descargar("inscripciones_ingles_rio_hurtado_" + fechaArchivo() + ".xls", xml, "application/vnd.ms-excel");
+}
+
+/* ---------- planilla completa (solo docentes con la clave) ---------- */
+
+async function cargarPlanilla(clave, destino) {
+  if (!INSCRIPCION.ENDPOINT) {
+    if (destino) destino.textContent = "Falta conectar la planilla del curso.";
+    return false;
+  }
+  if (destino) destino.textContent = "Leyendo la planilla…";
+  try {
+    const r = await fetch(INSCRIPCION.ENDPOINT + "?clave=" + encodeURIComponent(clave));
+    const d = await r.json();
+    if (!d.ok) {
+      REMOTO = null;
+      if (destino) destino.textContent = "La clave no corresponde.";
+      pintarPanel();
+      return false;
+    }
+    REMOTO = d.inscripciones || [];
+    try { localStorage.setItem(CLAVE_LOCAL, clave); } catch (e) { /* modo privado */ }
+    pintarPanel();
+    if (destino) destino.textContent = "Planilla cargada: " + REMOTO.length + " inscripciones.";
+    return true;
+  } catch (e) {
+    if (destino) destino.textContent = "No se pudo leer la planilla. Revisa la conexión.";
+    return false;
+  }
 }
 
 /* ---------- formulario ---------- */
@@ -341,6 +386,21 @@ function iniciarFormulario() {
     const copiar = $("#btn-copiar");
     if (copiar) copiar.addEventListener("click", () => copiarDatos(registro, copiar));
   });
+
+  const btnCargar = $("#btn-cargar");
+  if (btnCargar) {
+    btnCargar.addEventListener("click", () => {
+      const clave = ($("#clave-planilla").value || "").trim();
+      if (!clave) { $("#aviso-planilla").hidden = false; $("#aviso-planilla").textContent = "Escribe la clave del curso."; return; }
+      cargarPlanilla(clave, $("#aviso-planilla"));
+    });
+    $("#clave-planilla").addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") { ev.preventDefault(); btnCargar.click(); }
+    });
+    let guardada = "";
+    try { guardada = localStorage.getItem(CLAVE_LOCAL) || ""; } catch (e) { guardada = ""; }
+    if (guardada) { $("#clave-planilla").value = guardada; cargarPlanilla(guardada, $("#aviso-planilla")); }
+  }
 
   $("#agrupar").addEventListener("change", pintarPanel);
   $("#filtro-grupo").addEventListener("change", pintarPanel);

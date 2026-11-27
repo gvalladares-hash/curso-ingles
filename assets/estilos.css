@@ -904,3 +904,9 @@ table { border-collapse: collapse; width: 100%; }
   text-decoration: underline; cursor: pointer;
 }
 .enlace-copiar:hover { color: var(--adobe-claro); }
+
+.clave-planilla {
+  font: inherit; font-size: .8rem; padding: 9px 12px; border: 1px solid var(--linea);
+  border-radius: 6px; background: var(--crema); color: var(--noche); width: 150px;
+}
+.registro__aviso { margin: -6px 0 16px; font-size: .82rem; color: var(--salvia); }
