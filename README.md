@@ -125,7 +125,10 @@ postula, oficina o emprendimiento, localidad, correo electrónico y WhatsApp. La
   siempre se guarda una copia en `localStorage` del dispositivo, con lo que el registro y los
   indicadores funcionan sin internet.
 - **Panel de registro**: cuenta inscritos, municipales, emprendedores y localidades; permite
-  agrupar por localidad, grupo o emprendimiento y filtrar la tabla.
+  agrupar por localidad, grupo o emprendimiento y filtrar la tabla. Por defecto muestra lo
+  registrado en ese dispositivo; con la **clave del curso** («Cargar de la planilla») lee la hoja
+  completa y la clave queda guardada en el navegador. La clave vive solo en el script de Google,
+  nunca en este repositorio.
 - **Exportación**: `Descargar CSV` (UTF-8 con BOM y separador `;`, abre en Excel y Sheets) y
   `Descargar Excel` (hoja XML, abre directo en Excel).
 - **Sin endpoint**: el formulario funciona en modo local y ofrece enviar los datos por correo,
