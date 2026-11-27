@@ -766,7 +766,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* pie */
-.pie__logo { height: 88px; width: auto; margin-bottom: 16px; opacity: .95; }
+.pie__logo { height: 74px; width: auto; margin-bottom: 16px; opacity: .95; }
 
 @media (max-width: 900px) {
   .docente__grid { grid-template-columns: 1fr; }

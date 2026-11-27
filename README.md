@@ -27,9 +27,10 @@ sitio-web/
 ├── assets/
 │   ├── estilos.css                Diseño: colores, tipografías, grillas y responsive
 │   ├── app.js                     Menú móvil, filtros, buscadores, copiado, formulario
-│   ├── escudo-municipal.png       Escudo de la Municipalidad (uso institucional)
-│   ├── isologo-blanco.png         Isologo blanco para fondos oscuros (pie de página)
-│   └── logo-turismo-blanco.png    Logo de Turismo municipal (reserva)
+│   ├── logo-curso-emblema.png     Escudo del curso (barra superior y ficha)
+│   ├── logo-curso-emblema-180.png Escudo del curso para apple-touch-icon
+│   ├── logo-curso-horizontal.png  Logo horizontal claro (pie de página)
+│   └── favicon-curso-32.png       Icono de la pestaña del navegador
 ├── descargas/
 │   └── programa_ingles_b1.docx    Programa oficial en Word (40 clases)
 ├── materiales/
@@ -74,7 +75,13 @@ python3 build_site.py     # regenera el sitio (y actualiza la copia descargable)
 
 Requiere Python 3 y la librería `python-docx` (solo para el Word).
 
-### 3.3 Datos de contacto del curso
+### 3.3 Marca del sitio
+
+Las cuatro piezas de `assets/` **no se editan aquí**: `build_site.py` las copia en cada
+compilación desde `/Users/Geraldo/Desktop/TAREAS_ESTUDIO/assets/` (logo del curso). Para
+cambiarlas se trabaja en la skill `identidad-visual-curso` y se regeneran los PNG.
+
+## 3.4 Datos de contacto del curso
 
 | Dato | Dónde está | Valor actual (referencial) |
 |---|---|---|
