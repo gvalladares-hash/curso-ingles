@@ -91,24 +91,41 @@ async function enviarAPlanilla(registro) {
   }
 }
 
-function correoDeRespaldo(registro) {
-  const cuerpo = [
+// Respaldo cuando la planilla no está conectada: WhatsApp del curso con los datos listos.
+// No se usa mailto: en equipos sin programa de correo configurado abre una pestaña en blanco.
+function textoRespaldo(registro) {
+  return [
     "Inscripción al programa Inglés Río Hurtado",
-    "",
     "Nombre completo: " + registro.nombre,
     "Grupo: " + registro.grupo,
     "Oficina o emprendimiento: " + registro.negocio,
     "Localidad: " + registro.localidad,
     "Correo electrónico: " + registro.correo,
     "WhatsApp: " + registro.whatsapp,
-    "",
-    "Enviado desde la web del curso.",
   ].join("\n");
-  return (
-    "mailto:ingles.riohurtado2026@gmail.com" +
-    "?subject=" + encodeURIComponent("Inscripción · " + registro.nombre) +
-    "&body=" + encodeURIComponent(cuerpo)
-  );
+}
+
+function whatsappDeRespaldo(registro) {
+  return "https://wa.me/56957050087?text=" + encodeURIComponent(textoRespaldo(registro));
+}
+
+async function copiarDatos(registro, boton) {
+  const texto = textoRespaldo(registro);
+  try {
+    await navigator.clipboard.writeText(texto);
+    boton.textContent = "¡Datos copiados!";
+  } catch (e) {
+    const area = document.createElement("textarea");
+    area.value = texto;
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    try { document.execCommand("copy"); boton.textContent = "¡Datos copiados!"; }
+    catch (err) { boton.textContent = "No se pudo copiar"; }
+    area.remove();
+  }
+  setTimeout(() => { boton.textContent = "Copiar mis datos"; }, 2600);
 }
 
 /* ---------- indicadores y tabla ---------- */
@@ -178,7 +195,7 @@ function pintarPanel() {
   if (estado) {
     estado.textContent = INSCRIPCION.ENDPOINT
       ? "Conectado a la planilla del curso: cada inscripción queda guardada y avisa por correo."
-      : "Modo local: la inscripción queda en este dispositivo y se puede enviar por correo. Falta conectar la planilla del curso.";
+      : "Modo local: la inscripción queda en este dispositivo y se puede enviar por WhatsApp. Falta conectar la planilla del curso.";
     estado.classList.toggle("aviso--pendiente", !INSCRIPCION.ENDPOINT);
   }
   const abrir = $("#abrir-planilla");
@@ -307,19 +324,22 @@ function iniciarFormulario() {
       aviso.innerHTML =
         "¡Inscripción registrada! " + registro.nombre.split(" ")[0] +
         ", quedaste en la lista del grupo " + registro.grupo.replace(/^Grupo /, "") +
-        ". Te escribiremos al " + registro.whatsapp + " con la fecha de la primera sesión. " +
-        'También puedes <a href="' + correoDeRespaldo(registro) + '">enviarte una copia por correo</a>.';
+        ". Te escribiremos al " + registro.whatsapp + " con la fecha de la primera sesión.";
     } else if (resultado.estado === "error") {
       aviso.className = "form__aviso error";
       aviso.innerHTML =
         "Guardamos tu inscripción en este dispositivo, pero no pudimos avisar a la planilla. " +
-        'Para que quede registrada, <a href="' + correoDeRespaldo(registro) + '">envía el correo con tus datos</a>.';
+        'Para que quede registrada, <a href="' + whatsappDeRespaldo(registro) + '" target="_blank" rel="noopener">' +
+        "envía tus datos por WhatsApp</a> o <button type=\"button\" class=\"enlace-copiar\" id=\"btn-copiar\">cópialos</button>.";
     } else {
       aviso.className = "form__aviso ok";
       aviso.innerHTML =
-        "Inscripción guardada en este dispositivo. Todavía falta conectar la planilla del curso: " +
-        '<a href="' + correoDeRespaldo(registro) + '">envía el correo con tus datos</a> para que quede registrada.';
+        "Inscripción guardada en este dispositivo. Para que llegue a la planilla del curso, " +
+        '<a href="' + whatsappDeRespaldo(registro) + '" target="_blank" rel="noopener">envía tus datos por WhatsApp</a> ' +
+        'o <button type="button" class="enlace-copiar" id="btn-copiar">cópialos</button> y pégalos donde necesites.';
     }
+    const copiar = $("#btn-copiar");
+    if (copiar) copiar.addEventListener("click", () => copiarDatos(registro, copiar));
   });
 
   $("#agrupar").addEventListener("change", pintarPanel);

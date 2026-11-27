@@ -111,6 +111,39 @@ información (incluido el grupo al que postula) y lo abre en la aplicación de c
 usuario. Si el municipio tiene un formulario institucional (Google Forms, Microsoft Forms
 u otro), basta con reemplazar el bloque `<form>` por el enlace correspondiente.
 
+
+## 3.5 Inscripciones
+
+El formulario de `#inscripcion` pide seis datos obligatorios: nombre completo, grupo al que
+postula, oficina o emprendimiento, localidad, correo electrónico y WhatsApp. La lógica vive en
+`assets/inscripcion.js` (estático, no lo genera el build).
+
+- **Validación**: cada campo tiene su mensaje; el correo se revisa con formato y el WhatsApp se
+  normaliza a `+56 9 XXXX XXXX`.
+- **Guardado**: si `INSCRIPCION.ENDPOINT` tiene la URL del Web App, cada envío agrega una fila a
+  la hoja de Google y dispara un correo de aviso a `ingles.riohurtado2026@gmail.com`. Además
+  siempre se guarda una copia en `localStorage` del dispositivo, con lo que el registro y los
+  indicadores funcionan sin internet.
+- **Panel de registro**: cuenta inscritos, municipales, emprendedores y localidades; permite
+  agrupar por localidad, grupo o emprendimiento y filtrar la tabla.
+- **Exportación**: `Descargar CSV` (UTF-8 con BOM y separador `;`, abre en Excel y Sheets) y
+  `Descargar Excel` (hoja XML, abre directo en Excel).
+- **Sin endpoint**: el formulario funciona en modo local y ofrece enviar los datos por correo,
+  así no se pierde ninguna inscripción mientras se configura la planilla.
+
+### Conectar la planilla (una sola vez)
+
+1. Crear una planilla en <https://sheets.new> y llamarla «Inscripciones Inglés Río Hurtado 2026».
+2. Menú **Extensiones → Apps Script** y pegar el contenido de
+   `TAREAS_ESTUDIO/apps_script_inscripciones.gs`.
+3. **Implementar → Nueva implementación → Aplicación web**: ejecutar como «Yo», acceso
+   «Cualquier persona». Autorizar los permisos (hoja y envío de correo) y copiar la URL `/exec`.
+4. Pegar esa URL en `sitio-web/assets/inscripcion.js`, constante `INSCRIPCION.ENDPOINT`, y en
+   `INSCRIPCION.HOJA` la URL de la planilla. Volver a publicar.
+
+Si se quiere un resumen diario automático, ejecutar una vez `programarResumenDiario` en el editor
+de Apps Script: envía el conteo por grupo, localidad y emprendimiento todos los días a las 20:00.
+
 ## 4. Cómo publicarlo
 
 Cualquiera de estas opciones sirve, sin costo:
