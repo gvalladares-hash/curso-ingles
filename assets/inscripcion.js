@@ -15,12 +15,13 @@ const INSCRIPCION = {
 const CLAVE_LOCAL = "inglesRH.clave";
 let REMOTO = null;   // cuando tiene datos, el panel muestra la planilla completa
 
-const CAMPOS = ["nombre", "grupo", "negocio", "localidad", "correo", "whatsapp"];
+const CAMPOS = ["nombre", "grupo", "negocio", "localidad", "otraLocalidad", "correo", "whatsapp"];
 const ETIQUETAS = {
   nombre: "Nombre completo",
   grupo: "Grupo",
   negocio: "Oficina o emprendimiento",
   localidad: "Localidad",
+  otraLocalidad: "Nombre de la localidad",
   correo: "Correo electrónico",
   whatsapp: "WhatsApp",
 };
@@ -68,12 +69,22 @@ function validar(datos) {
   if (!datos.grupo) errores.grupo = "Elige el grupo al que postulas.";
   const negocio = (datos.negocio || "").trim();
   if (negocio.length < 3) errores.negocio = "Indica tu oficina, servicio o emprendimiento.";
-  if (!datos.localidad) errores.localidad = "Elige tu localidad.";
+  let localidad = (datos.localidad || "").trim();
+  if (!localidad) {
+    errores.localidad = "Elige tu localidad.";
+  } else if (localidad === "Otra localidad") {
+    const otra = (datos.otraLocalidad || "").trim();
+    if (otra.length < 3) {
+      errores.otraLocalidad = "Escribe el nombre de tu localidad.";
+    } else {
+      localidad = otra;   // se guarda el nombre real, no la opción genérica
+    }
+  }
   const correo = (datos.correo || "").trim();
   if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(correo)) errores.correo = "Revisa el correo: falta el arroba o el dominio.";
   const wpp = normalizarWhatsapp(datos.whatsapp);
   if (!wpp) errores.whatsapp = "Escribe el número con 9 dígitos, por ejemplo 9 1234 5678.";
-  return { errores, wpp, correo: correo.toLowerCase() };
+  return { errores, wpp, correo: correo.toLowerCase(), localidad };
 }
 
 /* ---------- envío ---------- */
@@ -322,9 +333,8 @@ function iniciarFormulario() {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (enviando) return;              // evita el doble envío por doble clic
-    enviando = true;
     const datos = Object.fromEntries(new FormData(form).entries());
-    const { errores, wpp, correo } = validar(datos);
+    const { errores, wpp, correo, localidad } = validar(datos);
     marcarErrores(errores);
     if (Object.keys(errores).length) {
       aviso.className = "form__aviso error";
@@ -345,7 +355,7 @@ function iniciarFormulario() {
       nombre: datos.nombre.trim(),
       grupo: datos.grupo,
       negocio: datos.negocio.trim(),
-      localidad: datos.localidad,
+      localidad,
       correo: correo,
       whatsapp: wpp,
     };
@@ -354,14 +364,20 @@ function iniciarFormulario() {
     aviso.textContent = "Guardando la inscripción…";
     const boton = $("button[type=submit]", form);
     boton.disabled = true;
-    const resultado = await enviarAPlanilla(registro);
-    boton.disabled = false;
-    enviando = false;
+    enviando = true;
+    let resultado;
+    try {
+      resultado = await enviarAPlanilla(registro);
+    } finally {
+      enviando = false;
+      boton.disabled = false;
+    }
 
     lista.push(registro);
     guardar(lista);
     pintarPanel();
     form.reset();
+    campoOtra.hidden = true;
     marcarErrores({});
 
     if (resultado.estado === "enviado") {
@@ -401,6 +417,16 @@ function iniciarFormulario() {
     try { guardada = localStorage.getItem(CLAVE_LOCAL) || ""; } catch (e) { guardada = ""; }
     if (guardada) { $("#clave-planilla").value = guardada; cargarPlanilla(guardada, $("#aviso-planilla")); }
   }
+
+  const selectLocalidad = $("#localidad");
+  const campoOtra = $("#campo-otra-localidad");
+  const alternarOtra = () => {
+    const esOtra = selectLocalidad.value === "Otra localidad";
+    campoOtra.hidden = !esOtra;
+    if (!esOtra) $("#otraLocalidad").value = "";
+    if (esOtra) $("#otraLocalidad").focus();
+  };
+  selectLocalidad.addEventListener("change", alternarOtra);
 
   $("#agrupar").addEventListener("change", pintarPanel);
   $("#filtro-grupo").addEventListener("change", pintarPanel);
