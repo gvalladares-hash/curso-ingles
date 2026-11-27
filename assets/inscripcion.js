@@ -8,7 +8,7 @@ const INSCRIPCION = {
   // Pegar aquí la URL del Web App de Apps Script (Implementar > Aplicación web).
   ENDPOINT: "https://script.google.com/macros/s/AKfycbz_q_1Ja4MQHsCadf8OnuV70Pqepvn7fwVF-i-4NJnFJZaeCzhsWYHmW63OoPxC_a-w/exec",
   // URL de la planilla para el botón «Abrir planilla» (opcional).
-  HOJA: "",  // pendiente: URL de la planilla del curso
+  HOJA: "https://docs.google.com/spreadsheets/d/1e-eI1ncGa6GqYxDNAf-V6B9ZATVsja8MDetMV0RMD-A/edit",
   CLAVE: "inglesRH.inscripciones.v1",
 };
 
